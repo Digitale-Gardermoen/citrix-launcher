@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Digitalt_Vindu.Properties {
+namespace citrix_launcher.Properties {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Digitalt_Vindu.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Strings() {
+        internal Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Digitalt_Vindu.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Digitalt_Vindu.Properties.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("citrix_launcher.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,57 +61,32 @@ namespace Digitalt_Vindu.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Konfigurasjons-filen inneholder feil..
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static string dvErrorCfgFileInvalid {
+        internal static System.Drawing.Icon dv_icon {
             get {
-                return ResourceManager.GetString("dvErrorCfgFileInvalid", resourceCulture);
+                object obj = ResourceManager.GetObject("dv_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finner ikke konfigurasjons-fil for Digitalt Vindu..
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string dvErrorCfgFileMissing {
+        internal static System.Drawing.Bitmap dv_launch {
             get {
-                return ResourceManager.GetString("dvErrorCfgFileMissing", resourceCulture);
+                object obj = ResourceManager.GetObject("dv_launch", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Feil ved lesing av konfigurasjons-fil..
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string dvErrorCfgFileNotReadable {
+        internal static System.Drawing.Bitmap dv_remote_50x50 {
             get {
-                return ResourceManager.GetString("dvErrorCfgFileNotReadable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trykk OK for å avslutte..
-        /// </summary>
-        internal static string dvErrorDefaultText {
-            get {
-                return ResourceManager.GetString("dvErrorDefaultText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: FEIL.
-        /// </summary>
-        internal static string dvErrorTitle {
-            get {
-                return ResourceManager.GetString("dvErrorTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Du sitter utenfor intern eller sikker sone.
-        ///Ønsker du å koble til hjemmekontor?.
-        /// </summary>
-        internal static string popupText {
-            get {
-                return ResourceManager.GetString("popupText", resourceCulture);
+                object obj = ResourceManager.GetObject("dv_remote_50x50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

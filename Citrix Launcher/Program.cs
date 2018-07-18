@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Digitalt_Vindu
+namespace citrix_launcher
 {
     static class Program
     {

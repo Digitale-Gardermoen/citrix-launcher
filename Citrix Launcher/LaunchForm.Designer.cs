@@ -1,4 +1,4 @@
-﻿namespace Digitalt_Vindu
+﻿namespace citrix_launcher
 {
     partial class LaunchForm
     {
@@ -28,19 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.image = new System.Windows.Forms.PictureBox();
             this.loadingBar = new System.Windows.Forms.ProgressBar();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // image
             // 
-            this.pictureBox1.Image = global::Digitalt_Vindu.Properties.Resources.dv_launch;
-            this.pictureBox1.Location = new System.Drawing.Point(1, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(150, 150);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.image.Location = new System.Drawing.Point(1, 0);
+            this.image.Name = "image";
+            this.image.Size = new System.Drawing.Size(150, 150);
+            this.image.TabIndex = 0;
+            this.image.TabStop = false;
             // 
             // loadingBar
             // 
@@ -57,24 +56,23 @@
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(150, 163);
             this.Controls.Add(this.loadingBar);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.image);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LaunchForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Start Digitalt Vindu";
             this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.DeepSkyBlue;
             this.Load += new System.EventHandler(this.LaunchForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox image;
         private System.Windows.Forms.ProgressBar loadingBar;
     }
 }

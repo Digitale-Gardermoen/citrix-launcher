@@ -1,10 +1,11 @@
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Digitalt_Vindu
+namespace citrix_launcher
 {
     public partial class CoreForm : Form
     {
@@ -14,7 +15,6 @@ namespace Digitalt_Vindu
             InitializeComponent();
         }
 
-        // Gjemmer form ved oppstart
         protected override void OnLoad(EventArgs e)
         {
             Visible = false;
@@ -25,39 +25,55 @@ namespace Digitalt_Vindu
         }
         #endregion
 
-        // Importerer funksjoner fra Windows API for kontroll av vinduer
         [DllImport("user32.dll")] internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
         [DllImport("user32.dll")] internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         [DllImport("user32.dll")] internal static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
 
         public static string ctxClientPath;
-        public static string ctxClientArgsInternal;
-        public static string ctxClientArgsSecure;
+        public static string ctxClientArgs1;
+        public static string ctxClientArgs2;
         public static string ctxWindowTitle;
-        public static string dvBrowserOrURL;
-        public static string dvBrowserArgs;
-        public static int dvLaunchTimeout;
-        public static string dvRegexInternal;
-        public static string dvRegexSecure;
+        public static string popupBrowserOrURL;
+        public static string popupBrowserArgs;
+        public static int popupLaunchTimeout;
+        public static string ipRegexPattern1;
+        public static string ipRegexPattern2;
 
-        string cfgFilePath = @"C:\Windows\DigitaltVindu\digitalt_vindu.cfg";
+        public string CfgPath()
+        {
+            try
+            {
+                RegistryKey reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Digitale Gardermoen IS\citrix-launcher", false);
+                string currentKey = reg.GetValue("ConfigPath", false).ToString();
+
+                return currentKey;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(this, Properties.Strings.popupErrorRegError + Environment.NewLine + Environment.NewLine +
+                                      e.Message + Environment.NewLine + Environment.NewLine +
+                                      Properties.Strings.popupErrorBottomText, Properties.Strings.popupErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Environment.Exit(1);
+            }
+            return null;
+        }
 
         public struct CfgKeys
         {
-            public const string CTX_CLIENT_ARGS_INTERNAL = @"CTX_CLIENT_ARGS_INTERNAL";
-            public const string CTX_CLIENT_ARGS_SECURE = @"CTX_CLIENT_ARGS_SECURE";
+            public const string CTX_CLIENT_ARGS1 = @"CTX_CLIENT_ARGS1";
+            public const string CTX_CLIENT_ARGS2 = @"CTX_CLIENT_ARGS2";
             public const string CTX_CLIENT_PATH = @"CTX_CLIENT_PATH";
             public const string CTX_WINDOW_TITLE = @"CTX_WINDOW_TITLE";
-            public const string DV_BROWSER_ARGS = @"DV_BROWSER_ARGS";
-            public const string DV_BROWSER_OR_URL = @"DV_BROWSER_OR_URL";
-            public const string DV_LAUNCH_TIMEOUT_IN_SECONDS = @"DV_LAUNCH_TIMEOUT_IN_SECONDS";
-            public const string DV_REGEX_INTERNAL = @"DV_REGEX_INTERNAL";
-            public const string DV_REGEX_SECURE = @"DV_REGEX_SECURE";
+            public const string POPUP_BROWSER_ARGS = @"POPUP_BROWSER_ARGS";
+            public const string POPUP_BROWSER_OR_URL = @"POPUP_BROWSER_OR_URL";
+            public const string POPUP_LAUNCH_TIMEOUT_IN_SECONDS = @"POPUP_LAUNCH_TIMEOUT_IN_SECONDS";
+            public const string IP_REGEX_PATTERN1 = @"IP_REGEX_PATTERN1";
+            public const string IP_REGEX_PATTERN2 = @"IP_REGEX_PATTERN2";
         }
 
         public void CoreForm_Load(object sender, EventArgs e)
         {
-            LoadConfig(cfgFilePath);
+            LoadConfig(CfgPath());
             Form main = new MainForm();
                  main.Show();
         }
@@ -66,10 +82,10 @@ namespace Digitalt_Vindu
         {
             try
             {
-                if (!File.Exists(cfgFilePath))
+                if (!File.Exists(CfgPath()))
                 {
-                    MessageBox.Show(this, Properties.Strings.dvErrorCfgFileMissing + Environment.NewLine + Environment.NewLine +
-                                          Properties.Strings.dvErrorDefaultText, Properties.Strings.dvErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show(this, Properties.Strings.popupErrorCfgFileMissing + Environment.NewLine + Environment.NewLine +
+                                          Properties.Strings.popupErrorBottomText, Properties.Strings.popupErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     Environment.Exit(2);
                 }
                 else
@@ -92,28 +108,28 @@ namespace Digitalt_Vindu
                         }
                         if (isConfigValid(cfg))
                         {
-                            ctxClientArgsInternal = cfg[CfgKeys.CTX_CLIENT_ARGS_INTERNAL];
-                            ctxClientArgsSecure = cfg[CfgKeys.CTX_CLIENT_ARGS_SECURE];
+                            ctxClientArgs1 = cfg[CfgKeys.CTX_CLIENT_ARGS1];
+                            ctxClientArgs2 = cfg[CfgKeys.CTX_CLIENT_ARGS2];
                             ctxClientPath = cfg[CfgKeys.CTX_CLIENT_PATH];
                             ctxWindowTitle = cfg[CfgKeys.CTX_WINDOW_TITLE];
-                            dvLaunchTimeout = int.Parse(cfg[CfgKeys.DV_LAUNCH_TIMEOUT_IN_SECONDS]);
-                            dvRegexInternal = cfg[CfgKeys.DV_REGEX_INTERNAL];
-                            dvRegexSecure = cfg[CfgKeys.DV_REGEX_SECURE];
-                            dvBrowserArgs = cfg[CfgKeys.DV_BROWSER_ARGS];
-                            dvBrowserOrURL = cfg[CfgKeys.DV_BROWSER_OR_URL];
+                            ipRegexPattern1 = cfg[CfgKeys.IP_REGEX_PATTERN1];
+                            ipRegexPattern2 = cfg[CfgKeys.IP_REGEX_PATTERN2];
+                            popupBrowserArgs = cfg[CfgKeys.POPUP_BROWSER_ARGS];
+                            popupBrowserOrURL = cfg[CfgKeys.POPUP_BROWSER_OR_URL];
+                            popupLaunchTimeout = int.Parse(cfg[CfgKeys.POPUP_LAUNCH_TIMEOUT_IN_SECONDS]);
                         }
                         else
                         {
-                            throw new Exception(Properties.Strings.dvErrorCfgFileInvalid);
+                            throw new Exception(Properties.Strings.popupErrorCfgFileInvalid);
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                MessageBox.Show(this, Properties.Strings.dvErrorCfgFileNotReadable + Environment.NewLine + Environment.NewLine +
+                MessageBox.Show(this, Properties.Strings.popupErrorCfgFileNotReadable + Environment.NewLine + Environment.NewLine +
                                       e.Message + Environment.NewLine + Environment.NewLine +
-                                      Properties.Strings.dvErrorDefaultText, Properties.Strings.dvErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                                      Properties.Strings.popupErrorBottomText, Properties.Strings.popupErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 Environment.Exit(1);
             }
         }

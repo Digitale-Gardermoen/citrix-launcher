@@ -117,26 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="dvErrorCfgFileInvalid" xml:space="preserve">
-    <value>Konfigurasjons-filen inneholder feil.</value>
+  <data name="popupButtonNo" xml:space="preserve">
+    <value>No</value>
   </data>
-  <data name="dvErrorCfgFileMissing" xml:space="preserve">
-    <value>Finner ikke konfigurasjons-fil for Digitalt Vindu.</value>
+  <data name="popupButtonYes" xml:space="preserve">
+    <value>Yes</value>
   </data>
-  <data name="dvErrorCfgFileNotReadable" xml:space="preserve">
-    <value>Feil ved lesing av konfigurasjons-fil.</value>
+  <data name="popupErrorBottomText" xml:space="preserve">
+    <value>Click OK to exit the application</value>
+    <comment>Text at the bottom in every error message</comment>
   </data>
-  <data name="dvErrorDefaultText" xml:space="preserve">
-    <value>Trykk OK for å avslutte.</value>
-    <comment>Tekst nederst i hver feilmelding</comment>
+  <data name="popupErrorCfgFileInvalid" xml:space="preserve">
+    <value>Configuration file contains an error.</value>
   </data>
-  <data name="dvErrorTitle" xml:space="preserve">
-    <value>Digitalt Vindu: FEIL</value>
-    <comment>Tittelen til vinduet hvis feil oppstår</comment>
+  <data name="popupErrorCfgFileMissing" xml:space="preserve">
+    <value>Couldn't find the configuration file. </value>
+  </data>
+  <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
+    <value>Configuration file is not readable.</value>
+  </data>
+  <data name="popupErrorRegError" xml:space="preserve">
+    <value>Path to configuration file is either invalid or missing.</value>
+  </data>
+  <data name="popupErrorTitle" xml:space="preserve">
+    <value>Citrix Launcher: ERROR</value>
   </data>
   <data name="popupText" xml:space="preserve">
-    <value>Du sitter utenfor intern eller sikker sone.
-Ønsker du å koble til hjemmekontor?</value>
-    <comment>Melding bruker blir møtt av når maskin er på eksternt nett</comment>
+    <value>Text goes here</value>
+  </data>
+  <data name="popupWindowTitle" xml:space="preserve">
+    <value>Citrix Launcher</value>
   </data>
 </root>

@@ -4,7 +4,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Digitalt_Vindu
+namespace citrix_launcher
 {
     public partial class MainForm : Form
     {
@@ -52,8 +52,8 @@ namespace Digitalt_Vindu
             Zones currentZone;
             string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
 
-            if (Regex.IsMatch(ipAddress, CoreForm.dvRegexInternal)) { currentZone = Zones.Internal; }
-            else if (Regex.IsMatch(ipAddress, CoreForm.dvRegexSecure)) { currentZone = Zones.Secure; }
+            if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern1)) { currentZone = Zones.Internal; }
+            else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2)) { currentZone = Zones.Secure; }
             else { currentZone = Zones.External; }
 
             Form launchForm = new LaunchForm();
@@ -63,11 +63,11 @@ namespace Digitalt_Vindu
             {
                 case Zones.Internal:
                     launchForm.Show();
-                    Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgsInternal);
+                    Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs1);
                     break;
                 case Zones.Secure:
                     launchForm.Show();
-                    Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgsSecure);
+                    Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs2);
                     break;
                 case Zones.External:
                     popupForm.Show();

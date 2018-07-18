@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Digitalt_Vindu
+namespace citrix_launcher
 {
     public partial class LaunchForm : Form
     {
@@ -16,6 +16,7 @@ namespace Digitalt_Vindu
         {
             loadingBar.Style = ProgressBarStyle.Marquee;
             loadingBar.MarqueeAnimationSpeed = 30;
+            image.Image = null;
 
             Thread processCheck = new Thread(LookForCTXProcess);
             processCheck.Start();
@@ -27,7 +28,7 @@ namespace Digitalt_Vindu
             Process[] p = Process.GetProcessesByName("CDViewer");
 
             // run while process does not exist
-            while (p.Length == 0 && count < CoreForm.dvLaunchTimeout)
+            while (p.Length == 0 && count < CoreForm.popupLaunchTimeout)
             {
                 Thread.Sleep(1000);
                 p = Process.GetProcessesByName("CDViewer");

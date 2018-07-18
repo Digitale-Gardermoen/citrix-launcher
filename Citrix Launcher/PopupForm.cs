@@ -2,13 +2,10 @@
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace Digitalt_Vindu
+namespace citrix_launcher
 {
     public partial class PopupForm : Form
     {
-        string browser = CoreForm.dvBrowserOrURL;
-        string url = CoreForm.dvBrowserArgs;
-
         #region Form
 
         public PopupForm()
@@ -23,9 +20,17 @@ namespace Digitalt_Vindu
         }
         #endregion
 
+        string browser = CoreForm.popupBrowserOrURL;
+        string url = CoreForm.popupBrowserArgs;
+
         private void PopupForm_Load(object sender, EventArgs e)
         {
-            text.Text = Properties.Strings.popupText;
+            Icon = null;
+            Text = Properties.Strings.popupWindowTitle;
+            popupPictureBox.Image = null;
+            popupBodyText.Text = Properties.Strings.popupText;
+            yesButton.Text = Properties.Strings.popupButtonYes;
+            noButton.Text = Properties.Strings.popupButtonNo;
         }
 
         private void NoButton_Click(object sender, EventArgs e)
