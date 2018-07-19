@@ -79,7 +79,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click OK to exit the application.
+        ///   Looks up a localized string similar to Click OK to exit the application..
         /// </summary>
         internal static string popupErrorBottomText {
             get {

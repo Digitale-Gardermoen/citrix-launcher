@@ -124,7 +124,7 @@
     <value>Yes</value>
   </data>
   <data name="popupErrorBottomText" xml:space="preserve">
-    <value>Click OK to exit the application</value>
+    <value>Click OK to exit the application.</value>
     <comment>Text at the bottom in every error message</comment>
   </data>
   <data name="popupErrorCfgFileInvalid" xml:space="preserve">

@@ -156,13 +156,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Digitalt Vindu\dv-launch.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Digitalt Vindu\dv-remote_50x50.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Digitalt Vindu\dv-icon.ico" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
