@@ -1,2 +1,5 @@
-# citrix-launcher
-A .Net application for launching Citrix connections based on DHCP address. 
+# Citrix Launcher
+A .NET application for launching Citrix connections based on DHCP address. 
+
+# Install
+TODO
