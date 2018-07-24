@@ -59,5 +59,15 @@ namespace citrix_launcher.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] citrix_launcher {
+            get {
+                object obj = ResourceManager.GetObject("citrix_launcher", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }
