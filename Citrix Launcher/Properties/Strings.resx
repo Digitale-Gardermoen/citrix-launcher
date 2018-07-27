@@ -136,7 +136,10 @@
   <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
     <value>Configuration file is not readable.</value>
   </data>
-  <data name="popupErrorRegError" xml:space="preserve">
+  <data name="popupErrorRegFailedToWrite" xml:space="preserve">
+    <value>Failed to write registry changes.</value>
+  </data>
+  <data name="popupErrorRegPathError" xml:space="preserve">
     <value>Path to configuration file is either invalid or missing.</value>
   </data>
   <data name="popupErrorTitle" xml:space="preserve">

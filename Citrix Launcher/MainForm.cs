@@ -25,7 +25,7 @@ namespace citrix_launcher
         }
         #endregion
 
-        enum Zones { Internal, Secure, External };
+        enum Zones { Zone1, Zone2, Zone3 };
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -52,24 +52,24 @@ namespace citrix_launcher
             Zones currentZone;
             string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
 
-            if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern1)) { currentZone = Zones.Internal; }
-            else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2)) { currentZone = Zones.Secure; }
-            else { currentZone = Zones.External; }
+            if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern1)) { currentZone = Zones.Zone1; }
+            else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2)) { currentZone = Zones.Zone2; }
+            else { currentZone = Zones.Zone3; }
 
             Form launchForm = new LaunchForm();
             Form popupForm = new PopupForm();
 
             switch (currentZone)
             {
-                case Zones.Internal:
+                case Zones.Zone1:
                     launchForm.Show();
                     Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs1);
                     break;
-                case Zones.Secure:
+                case Zones.Zone2:
                     launchForm.Show();
                     Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs2);
                     break;
-                case Zones.External:
+                case Zones.Zone3:
                     popupForm.Show();
                     break;
             }
