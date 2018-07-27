@@ -2,4 +2,4 @@
 A .NET application for launching Citrix connections based on DHCP address. 
 
 # Install
-TODO
+Run the application as Administrator.
