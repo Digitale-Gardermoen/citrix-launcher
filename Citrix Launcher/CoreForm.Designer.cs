@@ -42,7 +42,6 @@ namespace citrix_launcher
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.Load += new System.EventHandler(this.CoreForm_Load);
             this.ResumeLayout(false);
-
         }
 
         #endregion

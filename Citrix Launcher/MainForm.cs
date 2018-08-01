@@ -37,7 +37,7 @@ namespace citrix_launcher
             IntPtr wHandle = CoreForm.FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, CoreForm.ctxWindowTitle);
             if (wHandle == IntPtr.Zero)
             {
-                CheckIPandStartDV();
+                CheckIPandStartCTX();
             }
             else
             {
@@ -47,7 +47,7 @@ namespace citrix_launcher
             }
         }
 
-        public void CheckIPandStartDV()
+        public void CheckIPandStartCTX()
         {
             Zones currentZone;
             string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();

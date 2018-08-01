@@ -28,7 +28,7 @@ namespace citrix_launcher
             Process[] p = Process.GetProcessesByName("CDViewer");
 
             // run while process does not exist
-            while (p.Length == 0 && count < CoreForm.popupLaunchTimeout)
+            while (p.Length == 0 && count < CoreForm.launchTimeout)
             {
                 Thread.Sleep(1000);
                 p = Process.GetProcessesByName("CDViewer");
