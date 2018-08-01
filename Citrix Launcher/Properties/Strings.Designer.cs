@@ -115,24 +115,6 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to write registry changes..
-        /// </summary>
-        internal static string popupErrorRegFailedToWrite {
-            get {
-                return ResourceManager.GetString("popupErrorRegFailedToWrite", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Path to configuration file is either invalid or missing..
-        /// </summary>
-        internal static string popupErrorRegPathError {
-            get {
-                return ResourceManager.GetString("popupErrorRegPathError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Citrix Launcher: ERROR.
         /// </summary>
         internal static string popupErrorTitle {

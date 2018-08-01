@@ -125,7 +125,6 @@
   </data>
   <data name="popupErrorBottomText" xml:space="preserve">
     <value>Click OK to exit the application.</value>
-    <comment>Text at the bottom in every error message</comment>
   </data>
   <data name="popupErrorCfgFileInvalid" xml:space="preserve">
     <value>Configuration file contains an error.</value>
@@ -135,12 +134,6 @@
   </data>
   <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
     <value>Configuration file is not readable.</value>
-  </data>
-  <data name="popupErrorRegFailedToWrite" xml:space="preserve">
-    <value>Failed to write registry changes.</value>
-  </data>
-  <data name="popupErrorRegPathError" xml:space="preserve">
-    <value>Path to configuration file is either invalid or missing.</value>
   </data>
   <data name="popupErrorTitle" xml:space="preserve">
     <value>Citrix Launcher: ERROR</value>
