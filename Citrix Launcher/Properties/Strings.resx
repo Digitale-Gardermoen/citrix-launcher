@@ -118,30 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="popupButtonNo" xml:space="preserve">
-    <value>No</value>
+    <value>Nei</value>
   </data>
   <data name="popupButtonYes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ja</value>
   </data>
   <data name="popupErrorBottomText" xml:space="preserve">
-    <value>Click OK to exit the application.</value>
+    <value>Trykk OK for å avslutte applikasjonen.</value>
   </data>
   <data name="popupErrorCfgFileInvalid" xml:space="preserve">
-    <value>Configuration file contains an error.</value>
+    <value>Konfigurasjons-filen inneholder feil.</value>
   </data>
   <data name="popupErrorCfgFileMissing" xml:space="preserve">
-    <value>Couldn't find the configuration file. </value>
+    <value>Finner ikke konfigurasjons-fil.</value>
   </data>
   <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
-    <value>Configuration file is not readable.</value>
+    <value>Klarer ikke å lese konfigurasjons-fil.</value>
   </data>
   <data name="popupErrorTitle" xml:space="preserve">
-    <value>Citrix Launcher: ERROR</value>
+    <value>Digitalt Vindu: FEIL</value>
   </data>
   <data name="popupText" xml:space="preserve">
-    <value>Text goes here</value>
+    <value>Du sitter utenfor intern eller sikker sone.
+Ønsker du å koble til hjemmekontor?</value>
   </data>
   <data name="popupWindowTitle" xml:space="preserve">
-    <value>Citrix Launcher</value>
+    <value>Digitalt Vindu: Sone sjekk</value>
   </data>
 </root>

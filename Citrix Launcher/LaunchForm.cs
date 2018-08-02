@@ -16,7 +16,7 @@ namespace citrix_launcher
         {
             loadingBar.Style = ProgressBarStyle.Marquee;
             loadingBar.MarqueeAnimationSpeed = 30;
-            image.Image = null;
+            launch.Image = Properties.Resources.dv_launch;
 
             Thread processCheck = new Thread(LookForCTXProcess);
             processCheck.Start();

@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.image = new System.Windows.Forms.PictureBox();
+            this.launch = new System.Windows.Forms.PictureBox();
             this.loadingBar = new System.Windows.Forms.ProgressBar();
-            ((System.ComponentModel.ISupportInitialize)(this.image)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.launch)).BeginInit();
             this.SuspendLayout();
             // 
-            // image
+            // launch
             // 
-            this.image.Location = new System.Drawing.Point(1, 0);
-            this.image.Name = "image";
-            this.image.Size = new System.Drawing.Size(150, 150);
-            this.image.TabIndex = 0;
-            this.image.TabStop = false;
+            this.launch.Location = new System.Drawing.Point(1, 0);
+            this.launch.Name = "launch";
+            this.launch.Size = new System.Drawing.Size(150, 150);
+            this.launch.TabIndex = 0;
+            this.launch.TabStop = false;
             // 
             // loadingBar
             // 
@@ -56,7 +56,7 @@
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.ClientSize = new System.Drawing.Size(150, 163);
             this.Controls.Add(this.loadingBar);
-            this.Controls.Add(this.image);
+            this.Controls.Add(this.launch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LaunchForm";
             this.ShowIcon = false;
@@ -65,14 +65,14 @@
             this.TopMost = true;
             this.TransparencyKey = System.Drawing.Color.DeepSkyBlue;
             this.Load += new System.EventHandler(this.LaunchForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.image)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.launch)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox image;
+        private System.Windows.Forms.PictureBox launch;
         private System.Windows.Forms.ProgressBar loadingBar;
     }
 }

@@ -25,9 +25,9 @@ namespace citrix_launcher
 
         private void PopupForm_Load(object sender, EventArgs e)
         {
-            Icon = null;
+            Icon = Properties.Resources.dv_icon;
             Text = Properties.Strings.popupWindowTitle;
-            popupPictureBox.Image = null;
+            popupPictureBox.Image = Properties.Resources.dv_remote_50x50;
             popupBodyText.Text = Properties.Strings.popupText;
             yesButton.Text = Properties.Strings.popupButtonYes;
             noButton.Text = Properties.Strings.popupButtonNo;

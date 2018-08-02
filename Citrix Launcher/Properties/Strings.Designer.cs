@@ -61,7 +61,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No.
+        ///   Looks up a localized string similar to Nei.
         /// </summary>
         internal static string popupButtonNo {
             get {
@@ -70,7 +70,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Yes.
+        ///   Looks up a localized string similar to Ja.
         /// </summary>
         internal static string popupButtonYes {
             get {
@@ -79,7 +79,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click OK to exit the application..
+        ///   Looks up a localized string similar to Trykk OK for å avslutte applikasjonen..
         /// </summary>
         internal static string popupErrorBottomText {
             get {
@@ -88,7 +88,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration file contains an error..
+        ///   Looks up a localized string similar to Konfigurasjons-filen inneholder feil..
         /// </summary>
         internal static string popupErrorCfgFileInvalid {
             get {
@@ -97,7 +97,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t find the configuration file. .
+        ///   Looks up a localized string similar to Finner ikke konfigurasjons-fil..
         /// </summary>
         internal static string popupErrorCfgFileMissing {
             get {
@@ -106,7 +106,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration file is not readable..
+        ///   Looks up a localized string similar to Klarer ikke å lese konfigurasjons-fil..
         /// </summary>
         internal static string popupErrorCfgFileNotReadable {
             get {
@@ -115,7 +115,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Citrix Launcher: ERROR.
+        ///   Looks up a localized string similar to Digitalt Vindu: FEIL.
         /// </summary>
         internal static string popupErrorTitle {
             get {
@@ -124,7 +124,8 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text goes here.
+        ///   Looks up a localized string similar to Du sitter utenfor intern eller sikker sone.
+        ///Ønsker du å koble til hjemmekontor?.
         /// </summary>
         internal static string popupText {
             get {
@@ -133,7 +134,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Citrix Launcher.
+        ///   Looks up a localized string similar to Digitalt Vindu: Sone sjekk.
         /// </summary>
         internal static string popupWindowTitle {
             get {
