@@ -97,7 +97,7 @@ namespace citrix_launcher
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        if (line.Length == 0 || line.Substring(0, 1).Equals("#"))
+                        if (line.Length == 0 || line.Substring(0, 1).Equals('#'))
                         {
                             continue;
                         }
