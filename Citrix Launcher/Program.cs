@@ -1,19 +1,26 @@
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace citrix_launcher
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        static Mutex mutex = new Mutex(true, "{6136359e-fa7d-4739-9ad4-85cdbbb41b77}");
         [STAThread]
         static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CoreForm(args));
+            if (mutex.WaitOne(TimeSpan.Zero, true))
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new CoreForm(args));
+                mutex.ReleaseMutex();
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
         }
     }
 }

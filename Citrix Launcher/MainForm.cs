@@ -16,7 +16,6 @@ namespace citrix_launcher
 
         protected override void OnLoad(EventArgs e)
         {
-            // Gjemmer form ved oppstart
             Visible = false;
             ShowInTaskbar = false;
             Opacity = 0;
@@ -56,23 +55,24 @@ namespace citrix_launcher
             else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2)) { currentZone = Zones.Zone2; }
             else { currentZone = Zones.Zone3; }
 
-            Form launchForm = new LaunchForm();
-            Form popupForm = new PopupForm();
+            Process p;
+            Form formToShow;
 
             switch (currentZone)
             {
                 case Zones.Zone1:
-                    launchForm.Show();
-                    Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs1);
+                    p = Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs1);
+                    formToShow = new LaunchForm(p);
                     break;
                 case Zones.Zone2:
-                    launchForm.Show();
-                    Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs2);
+                    p = Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs2);
+                    formToShow = new LaunchForm(p);
                     break;
-                case Zones.Zone3:
-                    popupForm.Show();
+                default:
+                    formToShow = new PopupForm();
                     break;
             }
+            formToShow.Show();
         }
     }
 }

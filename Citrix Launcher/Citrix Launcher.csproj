@@ -7,7 +7,7 @@
     <ProjectGuid>{38B6B454-3821-4B40-A996-0B31B1E3D882}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>citrix_launcher</RootNamespace>
-    <AssemblyName>citrix_launcher</AssemblyName>
+    <AssemblyName>Digitalt Vindu</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
