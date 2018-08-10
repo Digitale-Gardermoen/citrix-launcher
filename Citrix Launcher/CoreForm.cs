@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace citrix_launcher
@@ -50,6 +51,9 @@ namespace citrix_launcher
         public static int launchTimeout;
         public static string popupBrowserOrURL;
         public static string popupBrowserArgs;
+        public static string groupBasedConfig;
+        public static string ldapServer;
+        public static string ldapMemberOf;
 
         public string GetConfigPath()
         {
@@ -63,7 +67,7 @@ namespace citrix_launcher
             }
         }
 
-        public struct CfgKeys
+        public struct MandatoryKeys
         {
             public const string CTX_CLIENT_ARGS1 = @"CTX_CLIENT_ARGS1";
             public const string CTX_CLIENT_ARGS2 = @"CTX_CLIENT_ARGS2";
@@ -74,6 +78,13 @@ namespace citrix_launcher
             public const string LAUNCH_TIMEOUT_IN_SECONDS = @"LAUNCH_TIMEOUT_IN_SECONDS";
             public const string POPUP_BROWSER_ARGS = @"POPUP_BROWSER_ARGS";
             public const string POPUP_BROWSER_OR_URL = @"POPUP_BROWSER_OR_URL";
+        }
+
+        public struct OptionalKeys
+        {
+            public const string GROUP_BASED_CONFIG = @"GROUP_BASED_CONFIG";
+            public const string LDAP_SERVER = @"LDAP_SERVER";
+            public const string LDAP_MEMBER_OF = @"LDAP_MEMBER_OF";
         }
 
         public void CoreForm_Load(object sender, EventArgs e)
@@ -94,41 +105,66 @@ namespace citrix_launcher
                                           Properties.Strings.popupErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     Environment.Exit(2);
                 }
-                
+
+                var namespaces = new List<string>();
+                var cfg = new Dictionary<string, string>();
+
                 using (StreamReader sr = new StreamReader(cfgFile))
                 {
-                    var cfg = new Dictionary<string, string>();
                     string line;
+                    string currentNamespace = "";
+
                     while ((line = sr.ReadLine()) != null)
                     {
                         if (line.Length == 0 || line.Substring(0, 1).Equals("#"))
                         {
                             continue;
                         }
-                        string[] lineParts = line.Split('=');
-                        string key = lineParts[0].Trim();
-                        string value = lineParts[1].Trim();
 
-                        cfg.Add(key, value);
-                    }
-                    if (isConfigValid(cfg))
-                    {
-                        ctxClientArgs1 = cfg[CfgKeys.CTX_CLIENT_ARGS1];
-                        ctxClientArgs2 = cfg[CfgKeys.CTX_CLIENT_ARGS2];
-                        ctxClientPath = cfg[CfgKeys.CTX_CLIENT_PATH];
-                        ctxWindowTitle = cfg[CfgKeys.CTX_WINDOW_TITLE];
-                        ipRegexPattern1 = cfg[CfgKeys.IP_REGEX_PATTERN1];
-                        ipRegexPattern2 = cfg[CfgKeys.IP_REGEX_PATTERN2];
-                        launchTimeout = int.Parse(cfg[CfgKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
-                        popupBrowserArgs = cfg[CfgKeys.POPUP_BROWSER_ARGS];
-                        popupBrowserOrURL = cfg[CfgKeys.POPUP_BROWSER_OR_URL];
-                    }
-                    else
-                    {
-                        throw new Exception(Properties.Strings.popupErrorCfgFileInvalid);
+                        if (Regex.IsMatch(line, @"^\[[a-z0-9\_]+\]$"))
+                        {
+                            currentNamespace = line.Substring(1, line.Length - 2);
+                            namespaces.Add(currentNamespace);
+                        }
+
+                        GetKeyValuePair(line, cfg, currentNamespace);
                     }
                 }
+
+                var currentConfig = new Dictionary<string, string>();
+                var @namespace = GetPrioritizedNamespace(namespaces, cfg);
+
+                foreach(string nsKey in cfg.Keys) // TODO: LDAP oppslag
+                {
+                    var keyParts = nsKey.Split('.');
+
+                    if (@namespace.Equals("global") || keyParts[0].Equals(@namespace))
+                    {
+                        currentConfig.Add(keyParts[1], cfg[nsKey]);
+                    }
+                }
+
+                if (isConfigValid(currentConfig))
+                {
+                    ctxClientArgs1 = currentConfig[MandatoryKeys.CTX_CLIENT_ARGS1];
+                    ctxClientArgs2 = currentConfig[MandatoryKeys.CTX_CLIENT_ARGS2];
+                    ctxClientPath = currentConfig[MandatoryKeys.CTX_CLIENT_PATH];
+                    ctxWindowTitle = currentConfig[MandatoryKeys.CTX_WINDOW_TITLE];
+                    ipRegexPattern1 = currentConfig[MandatoryKeys.IP_REGEX_PATTERN1];
+                    ipRegexPattern2 = currentConfig[MandatoryKeys.IP_REGEX_PATTERN2];
+                    launchTimeout = int.Parse(currentConfig[MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
+                    popupBrowserArgs = currentConfig[MandatoryKeys.POPUP_BROWSER_ARGS];
+                    popupBrowserOrURL = currentConfig[MandatoryKeys.POPUP_BROWSER_OR_URL];
+                    groupBasedConfig = currentConfig[OptionalKeys.GROUP_BASED_CONFIG];
+                    ldapServer = currentConfig[OptionalKeys.LDAP_SERVER];
+                    ldapMemberOf = currentConfig[OptionalKeys.LDAP_MEMBER_OF];
+                }
+                else
+                {
+                    throw new Exception(Properties.Strings.popupErrorCfgFileInvalid);
+                }
             }
+
             catch (Exception e)
             {
                 MessageBox.Show(this, Properties.Strings.popupErrorCfgFileNotReadable + Environment.NewLine + Environment.NewLine +
@@ -138,17 +174,66 @@ namespace citrix_launcher
             }
         }
 
+        private static string GetPrioritizedNamespace(List<string> namespaces, Dictionary<string, string> cfg)
+        {
+            string prioritizedNamespace = "";
+            int highestPri = int.MaxValue;
+
+            foreach (string ns in namespaces)
+            {
+                var key = ns + ".PRIORITY";
+
+                if (cfg.ContainsKey(key))
+                {
+                    var pri = int.Parse(cfg[key]);
+
+                    if (pri < highestPri)
+                    {
+                        highestPri = pri;
+                        prioritizedNamespace = ns;
+                    }
+                }
+            }
+
+            return prioritizedNamespace;
+        }
+
+        private static void GetKeyValuePair(string line, Dictionary<string, string> cfg, string currentNamespace)
+        {
+            var lineParts = line.Split('=');
+            var key = lineParts[0].Trim();
+
+            if (currentNamespace != "")
+            {
+                key = currentNamespace + "." + key;
+            }
+
+            var value = lineParts[1].Trim();
+            cfg.Add(key, value);
+        }
+
         private bool isConfigValid(Dictionary<string, string> cfg)
         {
-            var cfgKeys = new CfgKeys();
+            var mandatoryKeys = new MandatoryKeys();
+            var optionalKeys = new OptionalKeys();
             bool valid = true;
-            foreach(var field in typeof(CfgKeys).GetFields())
+
+            foreach(var field in typeof(MandatoryKeys).GetFields())
             {
-                if (!cfg.ContainsKey(field.GetValue(cfgKeys).ToString()))
+                if (!cfg.ContainsKey(field.GetValue(mandatoryKeys).ToString()))
                 {
                     valid = false;
                 }
             }
+
+            foreach (var field in typeof(OptionalKeys).GetFields())
+            {
+                if (!cfg.ContainsKey(field.GetValue(optionalKeys).ToString()))
+                {
+                    cfg.Add(field.GetValue(optionalKeys).ToString(), "");
+                }
+            }
+
             return valid;
         }
     }
