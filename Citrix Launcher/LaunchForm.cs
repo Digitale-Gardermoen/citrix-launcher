@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
@@ -7,8 +8,11 @@ namespace citrix_launcher
 {
     public partial class LaunchForm : Form
     {
-        public LaunchForm()
+        private Process ctxProcess;
+
+        public LaunchForm(Process p)
         {
+            ctxProcess = p;
             InitializeComponent();
         }
 
@@ -25,17 +29,34 @@ namespace citrix_launcher
         private void LookForCTXProcess()
         {
             int count = 0;
-            Process[] p = Process.GetProcessesByName("CDViewer");
-
-            // run while process does not exist
-            while (p.Length == 0 && count < CoreForm.launchTimeout)
+            while (!isProcessReady() && count++ < CoreForm.launchTimeout)
             {
                 Thread.Sleep(1000);
-                p = Process.GetProcessesByName("CDViewer");
-                count++;
             }
 
             Application.Exit();
+        }
+
+        private bool isProcessReady()
+        {
+            Console.WriteLine(ctxProcess.ExitTime + " " + (ctxProcess.ExitCode.ToString()));
+            List<Process> pList = new List<Process>();
+            string[] processNames = {
+                "CDViewer",
+                "Citrix Receiver"
+            };
+
+            foreach (string pName in processNames)
+            {
+                pList.AddRange(Process.GetProcessesByName(pName));
+            }
+
+            if (pList.Count > 0 || (ctxProcess.ExitTime.Day == DateTime.Now.Day && !ctxProcess.ExitCode.ToString().Equals("0")))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

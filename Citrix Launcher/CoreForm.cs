@@ -76,7 +76,7 @@ namespace citrix_launcher
         {
             LoadConfig(GetConfigPath());
             var main = new MainForm();
-                main.Show();
+            main.Show();
         }
 
         public void LoadConfig(string cfgFile)
