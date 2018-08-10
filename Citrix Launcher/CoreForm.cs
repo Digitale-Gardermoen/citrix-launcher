@@ -13,6 +13,10 @@ namespace citrix_launcher
         #region Form
         public CoreForm(string[] args)
         {
+            if (Environment.UserName.ToLower().StartsWith("adm-")) {
+                Environment.Exit(0);
+            }
+
             if (args.Length == 2 && args[0].ToLower().Equals("-cfgpath"))
             {
                 if (File.Exists(args[1]))
@@ -55,7 +59,7 @@ namespace citrix_launcher
             }
             else
             {
-                return Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86) + @"\Digitale Gardermoen IS\citrix-launcher\citrix-launcher.cfg";
+                return @".\citrix-launcher.cfg";
             }
         }
 
