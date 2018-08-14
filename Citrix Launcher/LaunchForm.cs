@@ -9,10 +9,12 @@ namespace citrix_launcher
     public partial class LaunchForm : Form
     {
         private Process ctxProcess;
+        private int timeout = 120;
 
-        public LaunchForm(Process p)
+        public LaunchForm( int timeout, string path, string args)
         {
-            ctxProcess = p;
+            this.timeout = timeout;
+            ctxProcess = Process.Start(path, args);
             InitializeComponent();
         }
 
@@ -29,7 +31,7 @@ namespace citrix_launcher
         private void LookForCTXProcess()
         {
             int count = 0;
-            while (!isProcessReady() && count++ < CoreForm.launchTimeout)
+            while (!isProcessReady() && count++ < timeout)
             {
                 Thread.Sleep(1000);
             }
