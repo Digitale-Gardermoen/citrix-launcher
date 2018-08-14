@@ -163,5 +163,10 @@
   <ItemGroup>
     <None Include="Resources\dv-icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="citrix-launcher.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

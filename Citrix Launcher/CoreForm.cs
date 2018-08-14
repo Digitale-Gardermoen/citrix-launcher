@@ -121,10 +121,11 @@ namespace citrix_launcher
                             continue;
                         }
 
-                        if (Regex.IsMatch(line, @"^\[[a-z0-9\_]+\]$"))
+                        if (Regex.IsMatch(line.ToLower(), @"^\[[a-z0-9_]+\]$"))
                         {
-                            currentNamespace = line.Substring(1, line.Length - 2);
+                            currentNamespace = line.Substring(1, line.Length - 2).ToLower();
                             namespaces.Add(currentNamespace);
+                            continue;
                         }
 
                         GetKeyValuePair(line, cfg, currentNamespace);
@@ -138,7 +139,7 @@ namespace citrix_launcher
                 {
                     var keyParts = nsKey.Split('.');
 
-                    if (@namespace.Equals("global") || keyParts[0].Equals(@namespace))
+                    if (keyParts[0].Equals("global") || keyParts[0].Equals(@namespace))
                     {
                         currentConfig.Add(keyParts[1], cfg[nsKey]);
                     }
