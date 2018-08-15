@@ -77,9 +77,6 @@ namespace citrix_launcher
                 config.IpRegexPattern2 = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN2];
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
                 config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
-                config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
-                config.GroupBasedConfig = currentConfig[Configuration.OptionalKeys.GROUP_BASED_CONFIG];
-                config.LdapMemberOf = currentConfig[Configuration.OptionalKeys.LDAP_MEMBER_OF];
             }
             else
             {
@@ -90,8 +87,6 @@ namespace citrix_launcher
         private Dictionary<string, string> ParseConfig(List<string> namespaces, Dictionary<string, string> cfg)
         {
             Dictionary<string, string> currentConfig = GetNamespacedConfig(namespaces, cfg);
-
-            FillWithDefaultValues(currentConfig);
 
             return currentConfig;
         }
@@ -105,26 +100,18 @@ namespace citrix_launcher
             {
                 var keyParts = nsKey.Split('.');
 
-                if (keyParts[0].Equals("global") || keyParts[0].Equals(@namespace))
+                if (keyParts[0].Equals("global") && !currentConfig.ContainsKey(keyParts[1]))
                 {
-                    currentConfig.Add(keyParts[1], cfg[nsKey]);
+                    currentConfig[keyParts[1]] = cfg[nsKey];
+                }
+
+                if (keyParts[0].Equals(@namespace))
+                {
+                    currentConfig[keyParts[1]] = cfg[nsKey];
                 }
             }
 
             return currentConfig;
-        }
-
-        private void FillWithDefaultValues(Dictionary<string, string> currentConfig)
-        {
-            var optionalKeys = new Configuration.OptionalKeys();
-
-            foreach (var field in typeof(Configuration.OptionalKeys).GetFields())
-            {
-                if (!currentConfig.ContainsKey(field.GetValue(optionalKeys).ToString()))
-                {
-                    currentConfig.Add(field.GetValue(optionalKeys).ToString(), "");
-                }
-            }
         }
 
         private void ReadConfig(string cfgFile, List<string> namespaces, Dictionary<string, string> cfg)
@@ -155,53 +142,47 @@ namespace citrix_launcher
 
         private string GetPrioritizedNamespace(List<string> namespaces, Dictionary<string, string> cfg)
         {
+            if (!DoGroupBasedConfig(cfg))
+            {
+                return "";
+            }
+
+            var ldapKeyBase = ".LDAP_MEMBER_OF";
+            var prioKeyBase = ".PRIORITY";
+
             var prioritizedNamespace = "";
             var highestPri = int.MaxValue;
-            var memberof = new List<string>();
 
-            var doGroupBased = DoGroupBasedConfig(cfg);
-
-            if (doGroupBased)
+            try
             {
-                try
+                var ctx = new PrincipalContext(ContextType.Domain);
+                var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName);
+                PrincipalSearchResult<Principal> groups;
+                if (user!= null)
                 {
-                    var ctx = new PrincipalContext(ContextType.Domain);
-                    var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName);
-                    PrincipalSearchResult<Principal> groups;
-                    if (user == null)
-                    {
-
-                    }
-
                     groups = user.GetGroups();
-                    foreach(var group in groups)
+
+                    foreach (var ns in namespaces)
                     {
-                        Console.WriteLine(group.Name);
-                    }
-                }
-                catch(Exception e)
-                {
-                    errorViewDelegate.ExitWithError("Can't contact AD\r\n\r\n" + e.Message, 3);
-                }
+                        if (ns == "global") continue;
 
-            }
-
-            foreach (string ns in namespaces)
-            {
-                var prioKey = ns + ".PRIORITY";
-                var groupKey = ns + ".LDAP_MEMBER_OF";
-
-                if (cfg.ContainsKey(prioKey))
-                {
-                    var pri = int.Parse(cfg[prioKey]);
-
-                    if (pri < highestPri)
-                    {
-                        highestPri = pri;
-                        prioritizedNamespace = ns;
+                        var ldapGroup = cfg[ns + ldapKeyBase];
+                        foreach (var group in groups)
+                        {
+                            if (Regex.IsMatch(group.Name, ".*(" + ldapGroup + ").*"))
+                            {
+                                var pri = int.Parse(cfg[ns + prioKeyBase]);
+                                if (pri < highestPri)
+                                {
+                                    highestPri = pri;
+                                    prioritizedNamespace = ns;
+                                }
+                            }
+                        }
                     }
                 }
             }
+            catch(Exception){ /* Don't do anything to failed connections to AD */ }
 
             return prioritizedNamespace;
         }
