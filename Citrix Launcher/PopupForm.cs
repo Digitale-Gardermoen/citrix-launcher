@@ -6,10 +6,15 @@ namespace citrix_launcher
 {
     public partial class PopupForm : Form
     {
+        private string browser;
+        private string url;
+
         #region Form
 
-        public PopupForm()
+        public PopupForm(string browser, string url)
         {
+            this.browser = browser;
+            this.url = url;
             InitializeComponent();
         }
 
@@ -20,8 +25,6 @@ namespace citrix_launcher
         }
         #endregion
 
-        string browser = CoreForm.popupBrowserOrURL;
-        string url = CoreForm.popupBrowserArgs;
 
         private void PopupForm_Load(object sender, EventArgs e)
         {
