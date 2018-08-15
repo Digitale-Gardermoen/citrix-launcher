@@ -27,7 +27,6 @@ namespace citrix_launcher
             if(sender == ctxProcess)
             {
                 ctxProcessExitCode = ctxProcess.ExitCode;
-                Console.WriteLine("ctxProc exitcode:" + ctxProcess.ExitCode);
             }
         }
 
@@ -56,16 +55,13 @@ namespace citrix_launcher
         {
             List<Process> pList = new List<Process>();
             string[] processNames = {
-                "CDViewer"
+                "CDViewer",
+                "SelfServicePlugin"
             };
             
             foreach (string pName in processNames)
             {
                 Process[] procs = Process.GetProcessesByName(pName);
-                foreach(var proc in procs)
-                {
-                    Console.WriteLine(proc.ProcessName + " -- " + proc.MainModule.FileName);
-                }
                 pList.AddRange(procs);
             }
 

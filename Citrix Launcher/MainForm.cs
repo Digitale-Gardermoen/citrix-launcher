@@ -58,7 +58,6 @@ namespace citrix_launcher
             foreach (IPAddress adr in ipAddresses)
             {
                 string ipAddress = adr.ToString();
-                Console.WriteLine(ipAddress);
 
                 if (Regex.IsMatch(ipAddress, Config.IpRegexPattern1))
                 {
