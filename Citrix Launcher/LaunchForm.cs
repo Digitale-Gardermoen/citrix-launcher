@@ -9,13 +9,26 @@ namespace citrix_launcher
     public partial class LaunchForm : Form
     {
         private Process ctxProcess;
+        private int ctxProcessExitCode = -1;
+
         private int timeout = 120;
 
         public LaunchForm( int timeout, string path, string args)
         {
             this.timeout = timeout;
             ctxProcess = Process.Start(path, args);
+            ctxProcess.EnableRaisingEvents = true;
+            ctxProcess.Exited += CitrixProcessExited;
             InitializeComponent();
+        }
+
+        private void CitrixProcessExited(object sender, EventArgs e)
+        {
+            if(sender == ctxProcess)
+            {
+                ctxProcessExitCode = ctxProcess.ExitCode;
+                Console.WriteLine("ctxProc exitcode:" + ctxProcess.ExitCode);
+            }
         }
 
         private void LaunchForm_Load(object sender, EventArgs e)
@@ -41,19 +54,22 @@ namespace citrix_launcher
 
         private bool isProcessReady()
         {
-            Console.WriteLine(ctxProcess.ExitTime + " " + (ctxProcess.ExitCode.ToString()));
             List<Process> pList = new List<Process>();
             string[] processNames = {
-                "CDViewer",
-                "Citrix Receiver"
+                "CDViewer"
             };
-
+            
             foreach (string pName in processNames)
             {
-                pList.AddRange(Process.GetProcessesByName(pName));
+                Process[] procs = Process.GetProcessesByName(pName);
+                foreach(var proc in procs)
+                {
+                    Console.WriteLine(proc.ProcessName + " -- " + proc.MainModule.FileName);
+                }
+                pList.AddRange(procs);
             }
 
-            if (pList.Count > 0 || (ctxProcess.ExitTime.Day == DateTime.Now.Day && !ctxProcess.ExitCode.ToString().Equals("0")))
+            if (pList.Count > 0 || (ctxProcess.HasExited && ctxProcessExitCode != 0))
             {
                 return true;
             }
