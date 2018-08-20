@@ -62,6 +62,7 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,12 +73,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoreForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CoreForm.Designer.cs">
-      <DependentUpon>CoreForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationLoader.cs" />
+    <Compile Include="IConfigProvider.cs" />
+    <Compile Include="IErrorDisplayer.cs" />
     <Compile Include="LaunchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,11 +95,8 @@
     <Compile Include="PopupForm.Designer.cs">
       <DependentUpon>PopupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="CitrixLauncher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="CoreForm.resx">
-      <DependentUpon>CoreForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LaunchForm.resx">
       <DependentUpon>LaunchForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,6 +158,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\dv-icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="citrix-launcher.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

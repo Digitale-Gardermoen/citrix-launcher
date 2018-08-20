@@ -1,16 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace citrix_launcher
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IErrorDisplayer
     {
+        public Configuration Config { get; private set; }
+
+        private IConfigProvider configProvider;
+
+        [DllImport("user32.dll")] internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")] internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        [DllImport("user32.dll")] internal static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
+
         #region Form
-        public MainForm()
+        public MainForm(IConfigProvider provider)
         {
+            configProvider = provider;
             InitializeComponent();
         }
 
@@ -24,55 +35,56 @@ namespace citrix_launcher
         }
         #endregion
 
-        enum Zones { Zone1, Zone2, Zone3 };
-
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Start();
-        }
-
-        private void Start()
-        {
-            IntPtr wHandle = CoreForm.FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, CoreForm.ctxWindowTitle);
+            Config = configProvider.GetConfiguration();
+            IntPtr wHandle = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, Config.CtxWindowTitle);
             if (wHandle == IntPtr.Zero)
             {
                 CheckIPandStartCTX();
             }
             else
             {
-                CoreForm.ShowWindow(wHandle, 3);
-                CoreForm.SetForegroundWindow(wHandle);
+                ShowWindow(wHandle, 3);
+                SetForegroundWindow(wHandle);
                 Application.Exit();
             }
         }
 
         public void CheckIPandStartCTX()
         {
-            Zones currentZone;
-            string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
-
-            if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern1)) { currentZone = Zones.Zone1; }
-            else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2)) { currentZone = Zones.Zone2; }
-            else { currentZone = Zones.Zone3; }
-
-            Process p;
-            Form formToShow;
-
-            switch (currentZone)
+            var ipAddresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+            Form formToShow = null;
+            foreach (IPAddress adr in ipAddresses)
             {
-                case Zones.Zone1:
-                    p = Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs1);
-                    formToShow = new LaunchForm(p);
+                string ipAddress = adr.ToString();
+
+                if (Regex.IsMatch(ipAddress, Config.IpRegexPattern1))
+                {
+                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs1);
                     break;
-                case Zones.Zone2:
-                    p = Process.Start(CoreForm.ctxClientPath, " " + CoreForm.ctxClientArgs2);
-                    formToShow = new LaunchForm(p);
+                }
+                else if (Regex.IsMatch(ipAddress, Config.IpRegexPattern2))
+                {
+                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs2);
                     break;
-                default:
-                    formToShow = new PopupForm();
-                    break;
+                }
             }
+
+            if(formToShow == null)
+            {
+                formToShow = new PopupForm(Config.PopupBrowserOrURL, Config.PopupBrowserArgs);
+            }
+
             formToShow.Show();
         }
+
+        public void ExitWithError(string msg, int exitcode)
+        {
+            MessageBox.Show(this, msg + Environment.NewLine + Environment.NewLine + Properties.Strings.popupErrorBottomText,
+                                  Properties.Strings.popupErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            Environment.Exit(exitcode);
+        }
+
     }
 }
