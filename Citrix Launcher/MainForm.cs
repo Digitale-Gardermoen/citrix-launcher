@@ -48,23 +48,12 @@ namespace citrix_launcher
 
         public void CheckIPandStartCTX()
         {
-            Zones currentZone = Zones.Zone3;
-            var ipAdresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-            foreach(var adr in ipAdresses)
-            {
-                string ipAddress = adr.ToString();
+            Zones currentZone;
+            string ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
 
-                if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern1))
-                {
-                    currentZone = Zones.Zone1;
-                    break;
-                }
-                else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2))
-                {
-                    currentZone = Zones.Zone2;
-                    break;
-                }
-            }
+            if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern1)) { currentZone = Zones.Zone1; }
+            else if (Regex.IsMatch(ipAddress, CoreForm.ipRegexPattern2)) { currentZone = Zones.Zone2; }
+            else { currentZone = Zones.Zone3; }
 
             Process p;
             Form formToShow;
