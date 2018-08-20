@@ -77,6 +77,7 @@ namespace citrix_launcher
                 config.IpRegexPattern2 = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN2];
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
                 config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
+                config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
             }
             else
             {
