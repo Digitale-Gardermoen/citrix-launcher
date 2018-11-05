@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace citrix_launcher
@@ -97,18 +95,22 @@ namespace citrix_launcher
             Dictionary<string, string> currentConfig = new Dictionary<string, string>();
             var @namespace = GetPrioritizedNamespace(namespaces, cfg);
 
-            foreach (string nsKey in cfg.Keys) // TODO: LDAP oppslag
+            foreach (string nsKey in cfg.Keys) 
             {
                 var keyParts = nsKey.Split('.');
+                var ns = keyParts[0];
+                ns += keyParts.Length > 2 ? "." + keyParts[1] : "";
 
-                if (keyParts[0].Equals("global") && !currentConfig.ContainsKey(keyParts[1]))
+                var key = keyParts.Length > 2 ? keyParts[2] : keyParts[1];
+
+                if (ns.Equals("global") && !currentConfig.ContainsKey(key))
                 {
-                    currentConfig[keyParts[1]] = cfg[nsKey];
+                    currentConfig[key] = cfg[nsKey];
                 }
 
-                if (keyParts[0].Equals(@namespace))
+                if (ns.Equals(@namespace))
                 {
-                    currentConfig[keyParts[1]] = cfg[nsKey];
+                    currentConfig[key] = cfg[nsKey];
                 }
             }
 
@@ -121,6 +123,8 @@ namespace citrix_launcher
             {
                 string line;
                 string currentNamespace = "";
+                string subNamespace = "";
+                string ns = "";
 
                 while ((line = sr.ReadLine()) != null)
                 {
@@ -132,11 +136,20 @@ namespace citrix_launcher
                     if (Regex.IsMatch(line.ToLower(), @"^\[[a-z0-9_]+\]$"))
                     {
                         currentNamespace = line.Substring(1, line.Length - 2).ToLower();
+                        subNamespace = "";
                         namespaces.Add(currentNamespace);
                         continue;
                     }
 
-                    GetKeyValuePair(line, cfg, currentNamespace);
+                    if (Regex.IsMatch(line.ToLower(), @"^\[\[[a-z0-9_]+\]\]$"))
+                    {
+                        subNamespace = line.Substring(2, line.Length - 4).ToLower();
+                        namespaces.Add(currentNamespace + "." + subNamespace);
+                        continue;
+                    }
+
+                    ns = subNamespace.Length > 0 ? currentNamespace + "." + subNamespace : currentNamespace;
+                    GetKeyValuePair(line, cfg, ns);
                 }
             }
         }
@@ -166,11 +179,11 @@ namespace citrix_launcher
                     foreach (var ns in namespaces)
                     {
                         if (ns == "global") continue;
-
-                        var ldapGroup = cfg[ns + ldapKeyBase];
+                        // todo: sjeke om ldapnøkkel finnes, sjekke om ip-regexs finnes. Bruke den som finnes for å jobbe videre
+                        var ldapGroupPattern = cfg[ns + ldapKeyBase];
                         foreach (var group in groups)
                         {
-                            if (Regex.IsMatch(group.Name, ".*(" + ldapGroup + ").*"))
+                            if (Regex.IsMatch(group.Name, ldapGroupPattern))
                             {
                                 var pri = int.Parse(cfg[ns + prioKeyBase]);
                                 if (pri < highestPri)

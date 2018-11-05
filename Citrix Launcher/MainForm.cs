@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -39,6 +38,7 @@ namespace citrix_launcher
         {
             Config = configProvider.GetConfiguration();
             IntPtr wHandle = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, Config.CtxWindowTitle);
+
             if (wHandle == IntPtr.Zero)
             {
                 CheckIPandStartCTX();
@@ -61,7 +61,7 @@ namespace citrix_launcher
 
                 if (Regex.IsMatch(ipAddress, Config.IpRegexPattern1))
                 {
-                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs1);
+                    formToShow = new PromptForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs1);
                     break;
                 }
                 else if (Regex.IsMatch(ipAddress, Config.IpRegexPattern2))
@@ -71,7 +71,7 @@ namespace citrix_launcher
                 }
             }
 
-            if(formToShow == null)
+            if (formToShow == null)
             {
                 formToShow = new PopupForm(Config.PopupBrowserOrURL, Config.PopupBrowserArgs);
             }
@@ -85,6 +85,5 @@ namespace citrix_launcher
                                   Properties.Strings.popupErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             Environment.Exit(exitcode);
         }
-
     }
 }

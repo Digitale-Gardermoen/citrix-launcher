@@ -63,18 +63,18 @@ namespace citrix_launcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Nei.
         /// </summary>
-        internal static string popupButtonNo {
+        internal static string buttonNo {
             get {
-                return ResourceManager.GetString("popupButtonNo", resourceCulture);
+                return ResourceManager.GetString("buttonNo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Ja.
         /// </summary>
-        internal static string popupButtonYes {
+        internal static string buttonYes {
             get {
-                return ResourceManager.GetString("popupButtonYes", resourceCulture);
+                return ResourceManager.GetString("buttonYes", resourceCulture);
             }
         }
         
@@ -139,6 +139,24 @@ namespace citrix_launcher.Properties {
         internal static string popupWindowTitle {
             get {
                 return ResourceManager.GetString("popupWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ønsker du å starte Digitalt Vindu?.
+        /// </summary>
+        internal static string promptText {
+            get {
+                return ResourceManager.GetString("promptText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Digitalt Vindu: Intern sone.
+        /// </summary>
+        internal static string promptWindowTitle {
+            get {
+                return ResourceManager.GetString("promptWindowTitle", resourceCulture);
             }
         }
     }
