@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace citrix_launcher
@@ -67,12 +68,10 @@ namespace citrix_launcher
         {
             if (IsConfigValid(currentConfig))
             {
-                config.CtxClientArgs1 = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS1];
-                config.CtxClientArgs2 = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS2];
+                config.CtxClientArgs = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS];
                 config.CtxClientPath = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_PATH];
                 config.CtxWindowTitle = currentConfig[Configuration.MandatoryKeys.CTX_WINDOW_TITLE];
-                config.IpRegexPattern1 = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN1];
-                config.IpRegexPattern2 = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN2];
+                config.IpRegexPattern = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN];
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
                 config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
                 config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
@@ -156,6 +155,37 @@ namespace citrix_launcher
 
         private string GetPrioritizedNamespace(List<string> namespaces, Dictionary<string, string> cfg)
         {
+            var ipRegexKeyBase = ".IP_REGEX_PATTERN";
+            var ipMatchedNS = "";
+
+            foreach (var ns in namespaces)
+            {
+                if (ns == "global") continue;
+                if (ns.Contains(".")) continue;
+                if (!cfg.ContainsKey(ns + ipRegexKeyBase)) continue;
+
+                var ipRegEx = cfg[ns + ipRegexKeyBase];
+                var ipAddresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+                var match = false;
+                foreach (IPAddress adr in ipAddresses)
+                {
+                    string ipAddress = adr.ToString();
+
+                    if (Regex.IsMatch(ipAddress, ipRegEx))
+                    {
+                        match = true;
+                        break;
+                    }
+                }
+
+                if (match)
+                {
+                    ipMatchedNS = ns;
+                }
+            }
+
+            if (ipMatchedNS == "") return "";
+
             if (!DoGroupBasedConfig(cfg))
             {
                 return "";
@@ -179,17 +209,21 @@ namespace citrix_launcher
                     foreach (var ns in namespaces)
                     {
                         if (ns == "global") continue;
+                        if (!ns.Contains(ipMatchedNS)) continue;
                         // todo: sjeke om ldapnøkkel finnes, sjekke om ip-regexs finnes. Bruke den som finnes for å jobbe videre
-                        var ldapGroupPattern = cfg[ns + ldapKeyBase];
-                        foreach (var group in groups)
+                        if (cfg.ContainsKey(ns + ldapKeyBase))
                         {
-                            if (Regex.IsMatch(group.Name, ldapGroupPattern))
+                            var ldapGroupPattern = cfg[ns + ldapKeyBase];
+                            foreach (var group in groups)
                             {
-                                var pri = int.Parse(cfg[ns + prioKeyBase]);
-                                if (pri < highestPri)
+                                if (Regex.IsMatch(group.Name, ldapGroupPattern))
                                 {
-                                    highestPri = pri;
-                                    prioritizedNamespace = ns;
+                                    var pri = int.Parse(cfg[ns + prioKeyBase]);
+                                    if (pri < highestPri)
+                                    {
+                                        highestPri = pri;
+                                        prioritizedNamespace = ns;
+                                    }
                                 }
                             }
                         }
@@ -236,6 +270,7 @@ namespace citrix_launcher
 
         private bool IsConfigValid(Dictionary<string, string> cfg)
         {
+            // TODO: Endre mandatory keys
             var mandatoryKeys = new Configuration.MandatoryKeys();
             bool valid = true;
 

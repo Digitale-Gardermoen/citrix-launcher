@@ -59,14 +59,14 @@ namespace citrix_launcher
             {
                 string ipAddress = adr.ToString();
 
-                if (Regex.IsMatch(ipAddress, Config.IpRegexPattern1))
+                if (Regex.IsMatch(ipAddress, Config.IpRegexPattern))
                 {
-                    formToShow = new PromptForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs1);
+                    formToShow = new PromptForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs);
                     break;
                 }
-                else if (Regex.IsMatch(ipAddress, Config.IpRegexPattern2))
+                else if (Regex.IsMatch(ipAddress, Config.IpRegexPattern))
                 {
-                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs2);
+                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs);
                     break;
                 }
             }
