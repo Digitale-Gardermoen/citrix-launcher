@@ -75,6 +75,11 @@ namespace citrix_launcher
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
                 config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
                 config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
+
+                if (currentConfig.ContainsKey(Configuration.OptionalKeys.CTX_AUTOSTART))
+                {
+                    config.CtxAutostart = bool.Parse(currentConfig[Configuration.OptionalKeys.CTX_AUTOSTART]);
+                }
             }
             else
             {
@@ -93,6 +98,7 @@ namespace citrix_launcher
         {
             Dictionary<string, string> currentConfig = new Dictionary<string, string>();
             var @namespace = GetPrioritizedNamespace(namespaces, cfg);
+            var nsParent = @namespace.Split('.')[0];
 
             foreach (string nsKey in cfg.Keys) 
             {
@@ -103,6 +109,11 @@ namespace citrix_launcher
                 var key = keyParts.Length > 2 ? keyParts[2] : keyParts[1];
 
                 if (ns.Equals("global") && !currentConfig.ContainsKey(key))
+                {
+                    currentConfig[key] = cfg[nsKey];
+                }
+
+                if (ns.Equals(nsParent) && !currentConfig.ContainsKey(key))
                 {
                     currentConfig[key] = cfg[nsKey];
                 }
@@ -188,7 +199,7 @@ namespace citrix_launcher
 
             if (!DoGroupBasedConfig(cfg))
             {
-                return "";
+                return ipMatchedNS;
             }
 
             var ldapKeyBase = ".LDAP_MEMBER_OF";
@@ -210,7 +221,6 @@ namespace citrix_launcher
                     {
                         if (ns == "global") continue;
                         if (!ns.Contains(ipMatchedNS)) continue;
-                        // todo: sjeke om ldapnøkkel finnes, sjekke om ip-regexs finnes. Bruke den som finnes for å jobbe videre
                         if (cfg.ContainsKey(ns + ldapKeyBase))
                         {
                             var ldapGroupPattern = cfg[ns + ldapKeyBase];
@@ -227,10 +237,19 @@ namespace citrix_launcher
                                 }
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine(ns + ldapKeyBase);
+                        }
                     }
                 }
             }
             catch(Exception){ /* Don't do anything to failed connections to AD */ }
+
+            if (prioritizedNamespace == "")
+            {
+                throw new Exception(Properties.Strings.popupErrorCfgFileNoGroupConfig);
+            }
 
             return prioritizedNamespace;
         }
@@ -270,7 +289,6 @@ namespace citrix_launcher
 
         private bool IsConfigValid(Dictionary<string, string> cfg)
         {
-            // TODO: Endre mandatory keys
             var mandatoryKeys = new Configuration.MandatoryKeys();
             bool valid = true;
 

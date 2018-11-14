@@ -97,7 +97,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finner ikke konfigurasjons-fil..
+        ///   Looks up a localized string similar to Finner ikke konfigurasjonsfil..
         /// </summary>
         internal static string popupErrorCfgFileMissing {
             get {
@@ -106,7 +106,16 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Klarer ikke å lese konfigurasjons-fil..
+        ///   Looks up a localized string similar to Mangler gruppekonfigurasjon i konfigurasjonsfil..
+        /// </summary>
+        internal static string popupErrorCfgFileNoGroupConfig {
+            get {
+                return ResourceManager.GetString("popupErrorCfgFileNoGroupConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Klarer ikke å lese konfigurasjonsfil..
         /// </summary>
         internal static string popupErrorCfgFileNotReadable {
             get {

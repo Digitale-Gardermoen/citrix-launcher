@@ -61,12 +61,14 @@ namespace citrix_launcher
 
                 if (Regex.IsMatch(ipAddress, Config.IpRegexPattern))
                 {
-                    formToShow = new PromptForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs);
-                    break;
-                }
-                else if (Regex.IsMatch(ipAddress, Config.IpRegexPattern))
-                {
-                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs);
+                    if (Config.CtxAutostart)
+                    {
+                        formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs);
+                    }
+                    else
+                    {
+                        formToShow = new PromptForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs);
+                    }
                     break;
                 }
             }

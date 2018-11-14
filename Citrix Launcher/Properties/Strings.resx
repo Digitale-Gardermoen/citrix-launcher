@@ -130,10 +130,13 @@
     <value>Konfigurasjons-filen inneholder feil.</value>
   </data>
   <data name="popupErrorCfgFileMissing" xml:space="preserve">
-    <value>Finner ikke konfigurasjons-fil.</value>
+    <value>Finner ikke konfigurasjonsfil.</value>
+  </data>
+  <data name="popupErrorCfgFileNoGroupConfig" xml:space="preserve">
+    <value>Mangler gruppekonfigurasjon i konfigurasjonsfil.</value>
   </data>
   <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
-    <value>Klarer ikke å lese konfigurasjons-fil.</value>
+    <value>Klarer ikke å lese konfigurasjonsfil.</value>
   </data>
   <data name="popupErrorTitle" xml:space="preserve">
     <value>Digitalt Vindu: FEIL</value>

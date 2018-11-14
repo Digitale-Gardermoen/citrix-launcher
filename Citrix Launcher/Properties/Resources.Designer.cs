@@ -83,6 +83,16 @@ namespace citrix_launcher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap dv_launch_50x50 {
+            get {
+                object obj = ResourceManager.GetObject("dv_launch_50x50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap dv_remote_50x50 {
             get {
                 object obj = ResourceManager.GetObject("dv_remote_50x50", resourceCulture);

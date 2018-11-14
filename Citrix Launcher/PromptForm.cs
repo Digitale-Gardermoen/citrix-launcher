@@ -30,7 +30,7 @@ namespace citrix_launcher
         {
             Icon = Properties.Resources.dv_icon;
             Text = Properties.Strings.promptWindowTitle;
-            pictureBox.Image = Properties.Resources.dv_remote_50x50;
+            pictureBox.Image = Properties.Resources.dv_launch_50x50;
             bodyText.Text = Properties.Strings.promptText;
             yesButton.Text = Properties.Strings.buttonYes;
             noButton.Text = Properties.Strings.buttonNo;
