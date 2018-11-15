@@ -10,7 +10,6 @@ namespace citrix_launcher
         private string url;
 
         #region Form
-
         public PopupForm(string browser, string url)
         {
             this.browser = browser;
@@ -25,15 +24,14 @@ namespace citrix_launcher
         }
         #endregion
 
-
         private void PopupForm_Load(object sender, EventArgs e)
         {
             Icon = Properties.Resources.dv_icon;
             Text = Properties.Strings.popupWindowTitle;
             popupPictureBox.Image = Properties.Resources.dv_remote_50x50;
             popupBodyText.Text = Properties.Strings.popupText;
-            yesButton.Text = Properties.Strings.popupButtonYes;
-            noButton.Text = Properties.Strings.popupButtonNo;
+            yesButton.Text = Properties.Strings.buttonYes;
+            noButton.Text = Properties.Strings.buttonNo;
         }
 
         private void NoButton_Click(object sender, EventArgs e)

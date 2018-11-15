@@ -8,8 +8,8 @@ namespace citrix_launcher
     class CitrixLauncher : IConfigProvider
     {
         private ConfigurationLoader configLoader;
-
         private Configuration config;
+
         public Configuration GetConfiguration()
         {
             return config;
@@ -42,12 +42,10 @@ namespace citrix_launcher
             InitializeApplication(mainForm, args);
 
             Application.Run(mainForm);
-
         }
 
         private void InitializeApplication(IErrorDisplayer errorDisplayer, string[] args)
         {
-
             if (args.Length == 2 && args[0].ToLower().Equals("-cfgpath") && File.Exists(args[1]) )
             {
                 configLoader = new ConfigurationLoader(errorDisplayer, args[1]);

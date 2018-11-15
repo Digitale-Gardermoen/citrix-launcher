@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace citrix_launcher
 {
     public class ConfigurationLoader
     {
+        static private string defaultConfigPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\citrix-launcher.cfg";
+
+        private Configuration config;
         private IErrorDisplayer errorViewDelegate;
         private string cfgPath;
 
-        const string DEFAULT_CONFIG_PATH = @".\citrix-launcher.cfg";
-
-        private Configuration config;
-
-        public ConfigurationLoader(IErrorDisplayer errorDelegate) : this(errorDelegate, DEFAULT_CONFIG_PATH) { }
+        public ConfigurationLoader(IErrorDisplayer errorDelegate) : this(errorDelegate, defaultConfigPath) { }
 
         public ConfigurationLoader(IErrorDisplayer errorDelegate, string configPath)
         {
@@ -69,15 +68,18 @@ namespace citrix_launcher
         {
             if (IsConfigValid(currentConfig))
             {
-                config.CtxClientArgs1 = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS1];
-                config.CtxClientArgs2 = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS2];
+                config.CtxClientArgs = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS];
                 config.CtxClientPath = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_PATH];
                 config.CtxWindowTitle = currentConfig[Configuration.MandatoryKeys.CTX_WINDOW_TITLE];
-                config.IpRegexPattern1 = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN1];
-                config.IpRegexPattern2 = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN2];
+                config.IpRegexPattern = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN];
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
                 config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
                 config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
+
+                if (currentConfig.ContainsKey(Configuration.OptionalKeys.CTX_AUTOSTART))
+                {
+                    config.CtxAutostart = bool.Parse(currentConfig[Configuration.OptionalKeys.CTX_AUTOSTART]);
+                }
             }
             else
             {
@@ -96,19 +98,29 @@ namespace citrix_launcher
         {
             Dictionary<string, string> currentConfig = new Dictionary<string, string>();
             var @namespace = GetPrioritizedNamespace(namespaces, cfg);
+            var nsParent = @namespace.Split('.')[0];
 
-            foreach (string nsKey in cfg.Keys) // TODO: LDAP oppslag
+            foreach (string nsKey in cfg.Keys) 
             {
                 var keyParts = nsKey.Split('.');
+                var ns = keyParts[0];
+                ns += keyParts.Length > 2 ? "." + keyParts[1] : "";
 
-                if (keyParts[0].Equals("global") && !currentConfig.ContainsKey(keyParts[1]))
+                var key = keyParts.Length > 2 ? keyParts[2] : keyParts[1];
+
+                if (ns.Equals("global") && !currentConfig.ContainsKey(key))
                 {
-                    currentConfig[keyParts[1]] = cfg[nsKey];
+                    currentConfig[key] = cfg[nsKey];
                 }
 
-                if (keyParts[0].Equals(@namespace))
+                if (ns.Equals(nsParent) && !currentConfig.ContainsKey(key))
                 {
-                    currentConfig[keyParts[1]] = cfg[nsKey];
+                    currentConfig[key] = cfg[nsKey];
+                }
+
+                if (ns.Equals(@namespace))
+                {
+                    currentConfig[key] = cfg[nsKey];
                 }
             }
 
@@ -121,6 +133,8 @@ namespace citrix_launcher
             {
                 string line;
                 string currentNamespace = "";
+                string subNamespace = "";
+                string ns = "";
 
                 while ((line = sr.ReadLine()) != null)
                 {
@@ -132,20 +146,60 @@ namespace citrix_launcher
                     if (Regex.IsMatch(line.ToLower(), @"^\[[a-z0-9_]+\]$"))
                     {
                         currentNamespace = line.Substring(1, line.Length - 2).ToLower();
+                        subNamespace = "";
                         namespaces.Add(currentNamespace);
                         continue;
                     }
 
-                    GetKeyValuePair(line, cfg, currentNamespace);
+                    if (Regex.IsMatch(line.ToLower(), @"^\[\[[a-z0-9_]+\]\]$"))
+                    {
+                        subNamespace = line.Substring(2, line.Length - 4).ToLower();
+                        namespaces.Add(currentNamespace + "." + subNamespace);
+                        continue;
+                    }
+
+                    ns = subNamespace.Length > 0 ? currentNamespace + "." + subNamespace : currentNamespace;
+                    GetKeyValuePair(line, cfg, ns);
                 }
             }
         }
 
         private string GetPrioritizedNamespace(List<string> namespaces, Dictionary<string, string> cfg)
         {
+            var ipRegexKeyBase = ".IP_REGEX_PATTERN";
+            var ipMatchedNS = "";
+
+            foreach (var ns in namespaces)
+            {
+                if (ns == "global") continue;
+                if (ns.Contains(".")) continue;
+                if (!cfg.ContainsKey(ns + ipRegexKeyBase)) continue;
+
+                var ipRegEx = cfg[ns + ipRegexKeyBase];
+                var ipAddresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
+                var match = false;
+                foreach (IPAddress adr in ipAddresses)
+                {
+                    string ipAddress = adr.ToString();
+
+                    if (Regex.IsMatch(ipAddress, ipRegEx))
+                    {
+                        match = true;
+                        break;
+                    }
+                }
+
+                if (match)
+                {
+                    ipMatchedNS = ns;
+                }
+            }
+
+            if (ipMatchedNS == "") return "";
+
             if (!DoGroupBasedConfig(cfg))
             {
-                return "";
+                return ipMatchedNS;
             }
 
             var ldapKeyBase = ".LDAP_MEMBER_OF";
@@ -166,24 +220,36 @@ namespace citrix_launcher
                     foreach (var ns in namespaces)
                     {
                         if (ns == "global") continue;
-
-                        var ldapGroup = cfg[ns + ldapKeyBase];
-                        foreach (var group in groups)
+                        if (!ns.Contains(ipMatchedNS)) continue;
+                        if (cfg.ContainsKey(ns + ldapKeyBase))
                         {
-                            if (Regex.IsMatch(group.Name, ".*(" + ldapGroup + ").*"))
+                            var ldapGroupPattern = cfg[ns + ldapKeyBase];
+                            foreach (var group in groups)
                             {
-                                var pri = int.Parse(cfg[ns + prioKeyBase]);
-                                if (pri < highestPri)
+                                if (Regex.IsMatch(group.Name, ldapGroupPattern))
                                 {
-                                    highestPri = pri;
-                                    prioritizedNamespace = ns;
+                                    var pri = int.Parse(cfg[ns + prioKeyBase]);
+                                    if (pri < highestPri)
+                                    {
+                                        highestPri = pri;
+                                        prioritizedNamespace = ns;
+                                    }
                                 }
                             }
+                        }
+                        else
+                        {
+                            Console.WriteLine(ns + ldapKeyBase);
                         }
                     }
                 }
             }
             catch(Exception){ /* Don't do anything to failed connections to AD */ }
+
+            if (prioritizedNamespace == "")
+            {
+                throw new Exception(Properties.Strings.popupErrorCfgFileNoGroupConfig);
+            }
 
             return prioritizedNamespace;
         }

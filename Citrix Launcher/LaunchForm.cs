@@ -13,7 +13,7 @@ namespace citrix_launcher
 
         private int timeout = 120;
 
-        public LaunchForm( int timeout, string path, string args)
+        public LaunchForm(int timeout, string path, string args)
         {
             this.timeout = timeout;
             ctxProcess = Process.Start(path, args);
