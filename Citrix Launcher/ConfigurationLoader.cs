@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace citrix_launcher
 {
     public class ConfigurationLoader
     {
+        static private string defaultConfigPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\citrix-launcher.cfg";
+
+        private Configuration config;
         private IErrorDisplayer errorViewDelegate;
         private string cfgPath;
 
-        const string DEFAULT_CONFIG_PATH = @".\citrix-launcher.cfg";
-
-        private Configuration config;
-
-        public ConfigurationLoader(IErrorDisplayer errorDelegate) : this(errorDelegate, DEFAULT_CONFIG_PATH) { }
+        public ConfigurationLoader(IErrorDisplayer errorDelegate) : this(errorDelegate, defaultConfigPath) { }
 
         public ConfigurationLoader(IErrorDisplayer errorDelegate, string configPath)
         {
