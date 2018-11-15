@@ -118,40 +118,40 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="buttonNo" xml:space="preserve">
-    <value>Nei</value>
+    <value>No</value>
   </data>
   <data name="buttonYes" xml:space="preserve">
-    <value>Ja</value>
+    <value>Yes</value>
   </data>
   <data name="popupErrorBottomText" xml:space="preserve">
-    <value>Trykk OK for å avslutte applikasjonen.</value>
+    <value>Click OK to exit the application.</value>
   </data>
   <data name="popupErrorCfgFileInvalid" xml:space="preserve">
-    <value>Konfigurasjons-filen inneholder feil.</value>
+    <value>Invalid configuration file.</value>
   </data>
   <data name="popupErrorCfgFileMissing" xml:space="preserve">
-    <value>Finner ikke konfigurasjonsfil.</value>
+    <value>Could not find configuration file.</value>
   </data>
   <data name="popupErrorCfgFileNoGroupConfig" xml:space="preserve">
-    <value>Mangler gruppekonfigurasjon i konfigurasjonsfil.</value>
+    <value>Group based configuration not found.</value>
   </data>
   <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
-    <value>Klarer ikke å lese konfigurasjonsfil.</value>
+    <value>Failed to read configuration file.</value>
   </data>
   <data name="popupErrorTitle" xml:space="preserve">
-    <value>Digitalt Vindu: FEIL</value>
+    <value>Citrix Launcher: ERROR</value>
   </data>
   <data name="popupText" xml:space="preserve">
-    <value>Du sitter utenfor intern eller sikker sone.
-Ønsker du å koble til hjemmekontor?</value>
+    <value>Example text, replace me in Strings.resx
+Click Yes to launch Citrix session.</value>
   </data>
   <data name="popupWindowTitle" xml:space="preserve">
-    <value>Digitalt Vindu: Sone sjekk</value>
+    <value>Citrix Launcher: Regex match</value>
   </data>
   <data name="promptText" xml:space="preserve">
-    <value>Ønsker du å starte Digitalt Vindu?</value>
+    <value>Would you like to start Citrix Launcher?</value>
   </data>
   <data name="promptWindowTitle" xml:space="preserve">
-    <value>Digitalt Vindu: Intern sone</value>
+    <value>Citrix Launcher</value>
   </data>
 </root>

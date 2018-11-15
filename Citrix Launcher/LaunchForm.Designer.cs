@@ -35,7 +35,7 @@
             // 
             // launch
             // 
-            this.launch.Image = global::citrix_launcher.Properties.Resources.dv_launch;
+            this.launch.Image = global::citrix_launcher.Properties.Resources.launch;
             this.launch.Location = new System.Drawing.Point(1, 0);
             this.launch.Name = "launch";
             this.launch.Size = new System.Drawing.Size(150, 150);

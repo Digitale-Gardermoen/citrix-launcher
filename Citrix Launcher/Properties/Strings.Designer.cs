@@ -61,7 +61,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nei.
+        ///   Looks up a localized string similar to No.
         /// </summary>
         internal static string buttonNo {
             get {
@@ -70,7 +70,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ja.
+        ///   Looks up a localized string similar to Yes.
         /// </summary>
         internal static string buttonYes {
             get {
@@ -79,7 +79,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trykk OK for å avslutte applikasjonen..
+        ///   Looks up a localized string similar to Click OK to exit the application..
         /// </summary>
         internal static string popupErrorBottomText {
             get {
@@ -88,7 +88,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Konfigurasjons-filen inneholder feil..
+        ///   Looks up a localized string similar to Invalid configuration file..
         /// </summary>
         internal static string popupErrorCfgFileInvalid {
             get {
@@ -97,7 +97,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finner ikke konfigurasjonsfil..
+        ///   Looks up a localized string similar to Could not find configuration file..
         /// </summary>
         internal static string popupErrorCfgFileMissing {
             get {
@@ -106,7 +106,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mangler gruppekonfigurasjon i konfigurasjonsfil..
+        ///   Looks up a localized string similar to Group based configuration not found..
         /// </summary>
         internal static string popupErrorCfgFileNoGroupConfig {
             get {
@@ -115,7 +115,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Klarer ikke å lese konfigurasjonsfil..
+        ///   Looks up a localized string similar to Failed to read configuration file..
         /// </summary>
         internal static string popupErrorCfgFileNotReadable {
             get {
@@ -124,7 +124,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: FEIL.
+        ///   Looks up a localized string similar to Citrix Launcher: ERROR.
         /// </summary>
         internal static string popupErrorTitle {
             get {
@@ -133,8 +133,8 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Du sitter utenfor intern eller sikker sone.
-        ///Ønsker du å koble til hjemmekontor?.
+        ///   Looks up a localized string similar to Example text, replace me in Strings.resx
+        ///Click Yes to launch Citrix session..
         /// </summary>
         internal static string popupText {
             get {
@@ -143,7 +143,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: Sone sjekk.
+        ///   Looks up a localized string similar to Citrix Launcher: Regex match.
         /// </summary>
         internal static string popupWindowTitle {
             get {
@@ -152,7 +152,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ønsker du å starte Digitalt Vindu?.
+        ///   Looks up a localized string similar to Would you like to start Citrix Launcher?.
         /// </summary>
         internal static string promptText {
             get {
@@ -161,7 +161,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: Intern sone.
+        ///   Looks up a localized string similar to Citrix Launcher.
         /// </summary>
         internal static string promptWindowTitle {
             get {

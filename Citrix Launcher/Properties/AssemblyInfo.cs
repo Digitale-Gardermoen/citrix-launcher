@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Digitalt Vindu")]
+[assembly: AssemblyTitle("Citrix Launcher")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Digitale Gardermoen IS")]
-[assembly: AssemblyProduct("Digitalt Vindu")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("© 2018 - Digitale Gardermoen IS")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

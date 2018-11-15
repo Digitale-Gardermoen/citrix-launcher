@@ -28,9 +28,9 @@ namespace citrix_launcher
 
         private void PromptForm_Load(object sender, EventArgs e)
         {
-            Icon = Properties.Resources.dv_icon;
+            Icon = Properties.Resources.icon;
             Text = Properties.Strings.promptWindowTitle;
-            pictureBox.Image = Properties.Resources.dv_launch_50x50;
+            pictureBox.Image = Properties.Resources.launch_50x50;
             bodyText.Text = Properties.Strings.promptText;
             yesButton.Text = Properties.Strings.buttonYes;
             noButton.Text = Properties.Strings.buttonNo;
