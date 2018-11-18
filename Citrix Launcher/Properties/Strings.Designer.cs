@@ -63,18 +63,18 @@ namespace citrix_launcher.Properties {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        internal static string popupButtonNo {
+        internal static string buttonNo {
             get {
-                return ResourceManager.GetString("popupButtonNo", resourceCulture);
+                return ResourceManager.GetString("buttonNo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        internal static string popupButtonYes {
+        internal static string buttonYes {
             get {
-                return ResourceManager.GetString("popupButtonYes", resourceCulture);
+                return ResourceManager.GetString("buttonYes", resourceCulture);
             }
         }
         
@@ -88,7 +88,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration file contains an error..
+        ///   Looks up a localized string similar to Invalid configuration file..
         /// </summary>
         internal static string popupErrorCfgFileInvalid {
             get {
@@ -97,7 +97,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t find the configuration file. .
+        ///   Looks up a localized string similar to Could not find configuration file..
         /// </summary>
         internal static string popupErrorCfgFileMissing {
             get {
@@ -106,7 +106,16 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration file is not readable..
+        ///   Looks up a localized string similar to Group based configuration not found..
+        /// </summary>
+        internal static string popupErrorCfgFileNoGroupConfig {
+            get {
+                return ResourceManager.GetString("popupErrorCfgFileNoGroupConfig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to read configuration file..
         /// </summary>
         internal static string popupErrorCfgFileNotReadable {
             get {
@@ -124,7 +133,8 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text goes here.
+        ///   Looks up a localized string similar to Example text, replace me in Strings.resx
+        ///Click Yes to launch Citrix session..
         /// </summary>
         internal static string popupText {
             get {
@@ -133,11 +143,29 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Citrix Launcher.
+        ///   Looks up a localized string similar to Citrix Launcher: Regex match.
         /// </summary>
         internal static string popupWindowTitle {
             get {
                 return ResourceManager.GetString("popupWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to start Citrix Launcher?.
+        /// </summary>
+        internal static string promptText {
+            get {
+                return ResourceManager.GetString("promptText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Citrix Launcher.
+        /// </summary>
+        internal static string promptWindowTitle {
+            get {
+                return ResourceManager.GetString("promptWindowTitle", resourceCulture);
             }
         }
     }

@@ -6,10 +6,14 @@ namespace citrix_launcher
 {
     public partial class PopupForm : Form
     {
-        #region Form
+        private string browser;
+        private string url;
 
-        public PopupForm()
+        #region Form
+        public PopupForm(string browser, string url)
         {
+            this.browser = browser;
+            this.url = url;
             InitializeComponent();
         }
 
@@ -20,17 +24,14 @@ namespace citrix_launcher
         }
         #endregion
 
-        string browser = CoreForm.popupBrowserOrURL;
-        string url = CoreForm.popupBrowserArgs;
-
         private void PopupForm_Load(object sender, EventArgs e)
         {
-            Icon = null;
+            Icon = Properties.Resources.icon;
             Text = Properties.Strings.popupWindowTitle;
-            popupPictureBox.Image = null;
+            popupPictureBox.Image = Properties.Resources.remote_50x50;
             popupBodyText.Text = Properties.Strings.popupText;
-            yesButton.Text = Properties.Strings.popupButtonYes;
-            noButton.Text = Properties.Strings.popupButtonNo;
+            yesButton.Text = Properties.Strings.buttonYes;
+            noButton.Text = Properties.Strings.buttonNo;
         }
 
         private void NoButton_Click(object sender, EventArgs e)

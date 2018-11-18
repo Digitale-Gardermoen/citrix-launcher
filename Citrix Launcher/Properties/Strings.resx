@@ -117,31 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="popupButtonNo" xml:space="preserve">
+  <data name="buttonNo" xml:space="preserve">
     <value>No</value>
   </data>
-  <data name="popupButtonYes" xml:space="preserve">
+  <data name="buttonYes" xml:space="preserve">
     <value>Yes</value>
   </data>
   <data name="popupErrorBottomText" xml:space="preserve">
     <value>Click OK to exit the application.</value>
   </data>
   <data name="popupErrorCfgFileInvalid" xml:space="preserve">
-    <value>Configuration file contains an error.</value>
+    <value>Invalid configuration file.</value>
   </data>
   <data name="popupErrorCfgFileMissing" xml:space="preserve">
-    <value>Couldn't find the configuration file. </value>
+    <value>Could not find configuration file.</value>
+  </data>
+  <data name="popupErrorCfgFileNoGroupConfig" xml:space="preserve">
+    <value>Group based configuration not found.</value>
   </data>
   <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
-    <value>Configuration file is not readable.</value>
+    <value>Failed to read configuration file.</value>
   </data>
   <data name="popupErrorTitle" xml:space="preserve">
     <value>Citrix Launcher: ERROR</value>
   </data>
   <data name="popupText" xml:space="preserve">
-    <value>Text goes here</value>
+    <value>Example text, replace me in Strings.resx
+Click Yes to launch Citrix session.</value>
   </data>
   <data name="popupWindowTitle" xml:space="preserve">
+    <value>Citrix Launcher: Regex match</value>
+  </data>
+  <data name="promptText" xml:space="preserve">
+    <value>Would you like to start Citrix Launcher?</value>
+  </data>
+  <data name="promptWindowTitle" xml:space="preserve">
     <value>Citrix Launcher</value>
   </data>
 </root>

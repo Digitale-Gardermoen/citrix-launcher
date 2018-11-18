@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
@@ -7,16 +8,33 @@ namespace citrix_launcher
 {
     public partial class LaunchForm : Form
     {
-        public LaunchForm()
+        private Process ctxProcess;
+        private int ctxProcessExitCode = -1;
+
+        private int timeout = 120;
+
+        public LaunchForm(int timeout, string path, string args)
         {
+            this.timeout = timeout;
+            ctxProcess = Process.Start(path, args);
+            ctxProcess.EnableRaisingEvents = true;
+            ctxProcess.Exited += CitrixProcessExited;
             InitializeComponent();
+        }
+
+        private void CitrixProcessExited(object sender, EventArgs e)
+        {
+            if(sender == ctxProcess)
+            {
+                ctxProcessExitCode = ctxProcess.ExitCode;
+            }
         }
 
         private void LaunchForm_Load(object sender, EventArgs e)
         {
             loadingBar.Style = ProgressBarStyle.Marquee;
             loadingBar.MarqueeAnimationSpeed = 30;
-            image.Image = null;
+            launch.Image = Properties.Resources.launch;
 
             Thread processCheck = new Thread(LookForCTXProcess);
             processCheck.Start();
@@ -25,17 +43,34 @@ namespace citrix_launcher
         private void LookForCTXProcess()
         {
             int count = 0;
-            Process[] p = Process.GetProcessesByName("CDViewer");
-
-            // run while process does not exist
-            while (p.Length == 0 && count < CoreForm.launchTimeout)
+            while (!isProcessReady() && count++ < timeout)
             {
                 Thread.Sleep(1000);
-                p = Process.GetProcessesByName("CDViewer");
-                count++;
             }
 
             Application.Exit();
+        }
+
+        private bool isProcessReady()
+        {
+            List<Process> pList = new List<Process>();
+            string[] processNames = {
+                "CDViewer",
+                "SelfServicePlugin"
+            };
+            
+            foreach (string pName in processNames)
+            {
+                Process[] procs = Process.GetProcessesByName(pName);
+                pList.AddRange(procs);
+            }
+
+            if (pList.Count > 0 || (ctxProcess.HasExited && ctxProcessExitCode != 0))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
