@@ -79,7 +79,9 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trykk OK for å avslutte applikasjonen..
+        ///   Looks up a localized string similar to Vennligst kontakt DGI Servicesenter på telefon: 64009000 eller e-post: servicedesk@dgi.no
+        ///
+        ///Trykk OK for å avslutte applikasjonen..
         /// </summary>
         internal static string popupErrorBottomText {
             get {
@@ -88,7 +90,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Konfigurasjons-filen inneholder feil..
+        ///   Looks up a localized string similar to Konfigurasjons-filen inneholder feil!.
         /// </summary>
         internal static string popupErrorCfgFileInvalid {
             get {
@@ -97,7 +99,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finner ikke konfigurasjonsfil..
+        ///   Looks up a localized string similar to Finner ikke konfigurasjonsfil!.
         /// </summary>
         internal static string popupErrorCfgFileMissing {
             get {
@@ -106,7 +108,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mangler gruppekonfigurasjon i konfigurasjonsfil..
+        ///   Looks up a localized string similar to Mangler gruppekonfigurasjon i konfigurasjonsfil!.
         /// </summary>
         internal static string popupErrorCfgFileNoGroupConfig {
             get {
@@ -115,11 +117,20 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Klarer ikke å lese konfigurasjonsfil..
+        ///   Looks up a localized string similar to Feil ved lesing av konfigurasjonsfil..
         /// </summary>
         internal static string popupErrorCfgFileNotReadable {
             get {
                 return ResourceManager.GetString("popupErrorCfgFileNotReadable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finner ikke Citrix klient!.
+        /// </summary>
+        internal static string popupErrorCtxClientMissing {
+            get {
+                return ResourceManager.GetString("popupErrorCtxClientMissing", resourceCulture);
             }
         }
         

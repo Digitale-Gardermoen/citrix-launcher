@@ -35,8 +35,7 @@ namespace citrix_launcher
 
                     var msg = Properties.Strings.popupErrorCfgFileMissing;
                     msg += Environment.NewLine;
-                    msg += Environment.NewLine;
-                    msg += cfgPath;
+                    msg += "[ " + cfgPath + " ]";
 
                     errorViewDelegate.ExitWithError(msg, exitcode);
                 }
@@ -79,6 +78,18 @@ namespace citrix_launcher
                 if (currentConfig.ContainsKey(Configuration.OptionalKeys.CTX_AUTOSTART))
                 {
                     config.CtxAutostart = bool.Parse(currentConfig[Configuration.OptionalKeys.CTX_AUTOSTART]);
+                }
+
+                if (!File.Exists(config.CtxClientPath))
+                {
+                    var exitcode = 2;
+
+                    var msg = Properties.Strings.popupErrorCtxClientMissing;
+                    msg += Environment.NewLine;
+                    msg += "[ " + config.CtxClientPath + " ]";
+                    Console.WriteLine(config.CtxClientPath);
+
+                    errorViewDelegate.ExitWithError(msg, exitcode);
                 }
             }
             else
