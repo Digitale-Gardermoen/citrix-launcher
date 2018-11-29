@@ -33,7 +33,7 @@ namespace citrix_launcher
                 {
                     var exitcode = 2;
 
-                    var msg = Properties.Strings.popupErrorCfgFileMissing;
+                    var msg = Properties.Strings.errorCfgFileMissing;
                     msg += Environment.NewLine;
                     msg += "[ " + cfgPath + " ]";
 
@@ -52,7 +52,7 @@ namespace citrix_launcher
             {
                 var exitcode = 1;
 
-                var msg = Properties.Strings.popupErrorCfgFileNotReadable;
+                var msg = Properties.Strings.errorCfgFileNotReadable;
                 msg += Environment.NewLine;
                 msg += Environment.NewLine;
                 msg += e.Message;
@@ -67,24 +67,26 @@ namespace citrix_launcher
         {
             if (IsConfigValid(currentConfig))
             {
+                config.CtxClearCache = bool.Parse(currentConfig[Configuration.MandatoryKeys.CTX_CLEAR_CACHE]);
                 config.CtxClientArgs = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS];
                 config.CtxClientPath = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_PATH];
                 config.CtxWindowTitle = currentConfig[Configuration.MandatoryKeys.CTX_WINDOW_TITLE];
                 config.IpRegexPattern = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN];
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
-                config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
-                config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
+                config.BrowserURL = currentConfig[Configuration.MandatoryKeys.BROWSER_URL];
+                config.BrowserPath = currentConfig[Configuration.MandatoryKeys.BROWSER_PATH];
 
                 if (currentConfig.ContainsKey(Configuration.OptionalKeys.CTX_AUTOSTART))
                 {
                     config.CtxAutostart = bool.Parse(currentConfig[Configuration.OptionalKeys.CTX_AUTOSTART]);
+                    config.CtxCachePath = Environment.ExpandEnvironmentVariables(currentConfig[Configuration.OptionalKeys.CTX_CACHE_PATH]);
                 }
 
                 if (!File.Exists(config.CtxClientPath))
                 {
                     var exitcode = 2;
 
-                    var msg = Properties.Strings.popupErrorCtxClientMissing;
+                    var msg = Properties.Strings.errorCtxClientMissing;
                     msg += Environment.NewLine;
                     msg += "[ " + config.CtxClientPath + " ]";
                     Console.WriteLine(config.CtxClientPath);
@@ -94,7 +96,7 @@ namespace citrix_launcher
             }
             else
             {
-                throw new Exception(Properties.Strings.popupErrorCfgFileInvalid);
+                throw new Exception(Properties.Strings.errorCfgFileInvalid);
             }
         }
 
@@ -259,7 +261,7 @@ namespace citrix_launcher
 
             if (prioritizedNamespace == "")
             {
-                throw new Exception(Properties.Strings.popupErrorCfgFileNoGroupConfig);
+                throw new Exception(Properties.Strings.errorCfgFileNoGroupCfgOrLDAPMismatch);
             }
 
             return prioritizedNamespace;
