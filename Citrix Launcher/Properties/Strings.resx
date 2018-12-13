@@ -151,7 +151,7 @@ Trykk OK for å avslutte applikasjonen.</value>
 Ønsker du å koble til hjemmekontor?</value>
   </data>
   <data name="retryCitrixLaunchPrompt" xml:space="preserve">
-    <value>Citrix klienten responderer ikke, vil du forsøke å koble til Digitalt Vindu på nytt?</value>
+    <value>Det ser ut til at Citrix klienten ikke responderer, vil du forsøke å koble til på nytt?</value>
   </data>
   <data name="windowTitle" xml:space="preserve">
     <value>Digitalt Vindu</value>
