@@ -154,7 +154,7 @@ namespace citrix_launcher.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Det ser ut til at Citrix klienten ikke responderer, vil du forsøke å koble til på nytt?.
+        ///   Looks up a localized string similar to Citrix klienten responderer ikke, vil du forsøke å koble til Digitalt Vindu på nytt?.
         /// </summary>
         internal static string retryCitrixLaunchPrompt {
             get {

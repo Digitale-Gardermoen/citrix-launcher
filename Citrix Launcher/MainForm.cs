@@ -125,7 +125,7 @@ namespace citrix_launcher
         }
 
         private void LaunchHomeOffice(bool launch)
-        { 
+        {
             if (launch)
             {
                 Process.Start(Config.BrowserPath, Config.BrowserURL);
@@ -182,3 +182,4 @@ namespace citrix_launcher
             Environment.Exit(exitcode);
         }
     }
+}
