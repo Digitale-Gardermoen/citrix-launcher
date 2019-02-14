@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace citrix_launcher
 {
     public partial class LaunchForm : Form
     {
+        [DllImport("user32.dll")] internal static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
+
         private Process ctxProcess;
         private ILaunchTimeoutHandler lth;
         private Timer launchTimer;
@@ -69,12 +72,12 @@ namespace citrix_launcher
             }
         }
 
-        private bool IsProcessReady()
+        private bool IsProcessReady() // TODO: Check if Selfservice exe should be one of the processes checked for due to error dialog
         {
             List<Process> pList = new List<Process>();
             string[] processNames = {
                 "CDViewer",
-                "SelfServicePlugin"
+                "SelfService"
             };
             
             foreach (string pName in processNames)
@@ -83,8 +86,29 @@ namespace citrix_launcher
                 pList.AddRange(procs);
             }
 
-            if (pList.Count > 0 || (ctxProcess.HasExited && ctxProcessExitCode != 0))
+            if (pList.Count > 0)
             {
+                var selfServiceCount = 0;
+                foreach (Process p in pList)
+                {
+                    if (p.ProcessName == "SelfService")
+                    {
+                        selfServiceCount++;
+                        IntPtr wHandle = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, "Citrix Receiver");
+
+                        if (wHandle != IntPtr.Zero)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                if(pList.Count > selfServiceCount)
+                {
+                    return true;
+                }
+            }
+
+            if (ctxProcess.HasExited && ctxProcessExitCode != 0) {
                 return true;
             }
 

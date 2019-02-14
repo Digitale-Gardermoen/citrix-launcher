@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace citrix_launcher
@@ -12,6 +10,7 @@ namespace citrix_launcher
     {
         public Configuration Config { get; private set; }
 
+        private ILogHandler logger;
         private IConfigProvider configProvider;
 
         [DllImport("user32.dll")] internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
@@ -20,8 +19,9 @@ namespace citrix_launcher
 
 
         #region Form
-        public MainForm(IConfigProvider provider)
+        public MainForm(IConfigProvider provider, ILogHandler logger)
         {
+            this.logger = logger;
             configProvider = provider;
             InitializeComponent();
         }
@@ -39,28 +39,33 @@ namespace citrix_launcher
         private void MainForm_Load(object sender, EventArgs e)
         {
             Config = configProvider.GetConfiguration();
-            IntPtr wHandle = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, Config.CtxWindowTitle);
 
-            if (wHandle == IntPtr.Zero)
+            if(!Config.useFallbackConfig)
             {
-                ClearCitrixCache();
-                CheckIPandStartCitrix();
+                IntPtr wHandle = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, Config.CitrixWindowTitle);
+
+                if (wHandle != IntPtr.Zero)
+                {
+                    ShowWindow(wHandle, 3);
+                    SetForegroundWindow(wHandle);
+                    Application.Exit();
+                }
+                else
+                {
+                    ClearCitrixCache();
+                }
             }
-            else
-            {
-                ShowWindow(wHandle, 3);
-                SetForegroundWindow(wHandle);
-                Application.Exit();
-            }
+
+            StartCitrix();
         }
 
         private void ClearCitrixCache()
         {
-            if (Config.CtxClearCache)
+            if (Config.CitrixClearCache)
             {
-                if (Directory.Exists(Config.CtxCachePath))
+                if (Directory.Exists(Config.CitrixCachePath))
                 {
-                    DirectoryInfo di = new DirectoryInfo(Config.CtxCachePath);
+                    DirectoryInfo di = new DirectoryInfo(Config.CitrixCachePath);
 
                     foreach (FileInfo file in di.GetFiles())
                     {
@@ -75,30 +80,22 @@ namespace citrix_launcher
             }
         }
 
-        public void CheckIPandStartCitrix()
+        public void StartCitrix()
         {
-            var ipAddresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
             Form formToShow = null;
-            foreach (IPAddress adr in ipAddresses)
+            if (Config.didMatchIp)
             {
-                string ipAddress = adr.ToString();
-
-                if (Regex.IsMatch(ipAddress, Config.IpRegexPattern))
+                if (Config.CitrixAutostart)
                 {
-                    if (Config.CtxAutostart)
-                    {
-                        formToShow = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs, this);
-                    }
-                    else
-                    {
-                        formToShow = new YesNoForm(Properties.Strings.launchCitrixPrompt, Properties.Resources.dv_launch_50x50, this);
-                    }
-                    break;
+                    formToShow = new LaunchForm(Config.LaunchTimeout, Config.CitrixClientPath, Config.CitrixClientArgs, this);
+                }
+                else
+                {
+                    formToShow = new YesNoForm(Properties.Strings.launchCitrixPrompt, Properties.Resources.dv_launch_50x50, this);
                 }
             }
-
-            if (formToShow == null)
-            {
+            else
+            { 
                 formToShow = new YesNoForm(Properties.Strings.launchHomeOfficePrompt, Properties.Resources.dv_remote_50x50, this);
             }
 
@@ -119,13 +116,22 @@ namespace citrix_launcher
             }
             else if (prompt == Properties.Strings.retryCitrixLaunchPrompt)
             {
-                KillCitrixProcesses();
-                LaunchCitrix(answerYes);
+                switch (answerYes)
+                {
+                    case true:
+                        KillCitrixProcesses();
+                        LaunchCitrix(answerYes);
+                    break;
+
+                    case false:
+                        Application.Exit();
+                    break;
+                }
             }
         }
 
         private void LaunchHomeOffice(bool launch)
-        { 
+        {
             if (launch)
             {
                 Process.Start(Config.BrowserPath, Config.BrowserURL);
@@ -138,7 +144,7 @@ namespace citrix_launcher
         {
             if (launch)
             {
-                LaunchForm form = new LaunchForm(Config.LaunchTimeout, Config.CtxClientPath, Config.CtxClientArgs, this);
+                LaunchForm form = new LaunchForm(Config.LaunchTimeout, Config.CitrixClientPath, Config.CitrixClientArgs, this);
                 form.Show();
             }
             else
@@ -163,15 +169,23 @@ namespace citrix_launcher
                 "wfcrun32",
                 "wfica32",
                 "AuthManSvr",
-                "CDViewer"
+                "CDViewer",
+                "redirector"
             };
 
-            foreach (string pName in processNames)
+            try
             {
-                foreach (var process in Process.GetProcessesByName(pName))
+                foreach (string pName in processNames)
                 {
-                    process.Kill();
+                    foreach (var process in Process.GetProcessesByName(pName))
+                    {
+                        process.Kill();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                logger.Write("ERROR! Failed to kill Citrix processes: " + e.TargetSite + " (" + e.Message + ")");
             }
         }
 
@@ -182,3 +196,4 @@ namespace citrix_launcher
             Environment.Exit(exitcode);
         }
     }
+}

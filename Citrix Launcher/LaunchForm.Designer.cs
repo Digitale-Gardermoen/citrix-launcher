@@ -36,16 +36,16 @@
             // launch
             // 
             this.launch.Image = global::citrix_launcher.Properties.Resources.dv_launch;
-            this.launch.Location = new System.Drawing.Point(1, 0);
+            this.launch.Location = new System.Drawing.Point(1, 1);
             this.launch.Name = "launch";
             this.launch.Size = new System.Drawing.Size(150, 150);
             this.launch.TabIndex = 0;
             this.launch.TabStop = false;
             // 
-            // loadingBar
+            // progressBar
             // 
             this.progressBar.Location = new System.Drawing.Point(1, 153);
-            this.progressBar.Name = "loadingBar";
+            this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(150, 10);
             this.progressBar.TabIndex = 1;
             this.progressBar.UseWaitCursor = true;
@@ -55,7 +55,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(150, 163);
+            this.ClientSize = new System.Drawing.Size(152, 164);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.launch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

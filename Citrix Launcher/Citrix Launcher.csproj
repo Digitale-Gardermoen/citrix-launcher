@@ -58,6 +58,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\dv-icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release wDebug|AnyCPU'">
+    <OutputPath>bin\Release wDebug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -73,11 +76,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logger.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationLoader.cs" />
     <Compile Include="IConfigProvider.cs" />
     <Compile Include="IErrorDisplayer.cs" />
     <Compile Include="ILaunchTimeoutHandler.cs" />
+    <Compile Include="ILogHandler.cs" />
     <Compile Include="IYesNoHandler.cs" />
     <Compile Include="LaunchForm.cs">
       <SubType>Form</SubType>
@@ -170,4 +175,8 @@
     <None Include="Resources\dv-launch_50x50.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>
