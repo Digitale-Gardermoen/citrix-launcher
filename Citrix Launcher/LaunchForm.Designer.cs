@@ -29,34 +29,34 @@
         private void InitializeComponent()
         {
             this.launch = new System.Windows.Forms.PictureBox();
-            this.loadingBar = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.launch)).BeginInit();
             this.SuspendLayout();
             // 
             // launch
             // 
             this.launch.Image = global::citrix_launcher.Properties.Resources.dv_launch;
-            this.launch.Location = new System.Drawing.Point(1, 0);
+            this.launch.Location = new System.Drawing.Point(1, 1);
             this.launch.Name = "launch";
             this.launch.Size = new System.Drawing.Size(150, 150);
             this.launch.TabIndex = 0;
             this.launch.TabStop = false;
             // 
-            // loadingBar
+            // progressBar
             // 
-            this.loadingBar.Location = new System.Drawing.Point(1, 153);
-            this.loadingBar.Name = "loadingBar";
-            this.loadingBar.Size = new System.Drawing.Size(150, 10);
-            this.loadingBar.TabIndex = 1;
-            this.loadingBar.UseWaitCursor = true;
+            this.progressBar.Location = new System.Drawing.Point(1, 153);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(150, 10);
+            this.progressBar.TabIndex = 1;
+            this.progressBar.UseWaitCursor = true;
             // 
             // LaunchForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.ClientSize = new System.Drawing.Size(150, 163);
-            this.Controls.Add(this.loadingBar);
+            this.ClientSize = new System.Drawing.Size(152, 164);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.launch);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "LaunchForm";
@@ -74,6 +74,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox launch;
-        private System.Windows.Forms.ProgressBar loadingBar;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Digitale Gardermoen IS")]
 [assembly: AssemblyProduct("Digitalt Vindu")]
-[assembly: AssemblyCopyright("© 2018 - Digitale Gardermoen IS")]
+[assembly: AssemblyCopyright("© 2019 - Digitale Gardermoen IS")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,4 +32,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1")]
-[assembly: AssemblyFileVersion("1.3.2")]
+[assembly: AssemblyFileVersion("1.0.0.1")]

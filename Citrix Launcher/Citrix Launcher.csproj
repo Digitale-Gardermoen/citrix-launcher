@@ -58,6 +58,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\dv-icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release wDebug|AnyCPU'">
+    <OutputPath>bin\Release wDebug\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -73,10 +76,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logger.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigurationLoader.cs" />
     <Compile Include="IConfigProvider.cs" />
     <Compile Include="IErrorDisplayer.cs" />
+    <Compile Include="ILaunchTimeoutHandler.cs" />
+    <Compile Include="ILogHandler.cs" />
+    <Compile Include="IYesNoHandler.cs" />
     <Compile Include="LaunchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -89,19 +96,13 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PopupForm.cs">
+    <Compile Include="YesNoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PopupForm.Designer.cs">
-      <DependentUpon>PopupForm.cs</DependentUpon>
+    <Compile Include="YesNoForm.Designer.cs">
+      <DependentUpon>YesNoForm.cs</DependentUpon>
     </Compile>
     <Compile Include="CitrixLauncher.cs" />
-    <Compile Include="PromptForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PromptForm.Designer.cs">
-      <DependentUpon>PromptForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="LaunchForm.resx">
       <DependentUpon>LaunchForm.cs</DependentUpon>
@@ -109,11 +110,8 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PopupForm.resx">
-      <DependentUpon>PopupForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PromptForm.resx">
-      <DependentUpon>PromptForm.cs</DependentUpon>
+    <EmbeddedResource Include="YesNoForm.resx">
+      <DependentUpon>YesNoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -177,4 +175,8 @@
     <None Include="Resources\dv-launch_50x50.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -14,14 +14,18 @@ namespace citrix_launcher
 
         private Configuration config;
         private IErrorDisplayer errorViewDelegate;
+        private ILogHandler logger;
         private string cfgPath;
 
-        public ConfigurationLoader(IErrorDisplayer errorDelegate) : this(errorDelegate, defaultConfigPath) { }
+        private bool didMatchIp = false;
 
-        public ConfigurationLoader(IErrorDisplayer errorDelegate, string configPath)
+        public ConfigurationLoader(IErrorDisplayer errorDelegate, ILogHandler logger) : this(errorDelegate, logger, defaultConfigPath) { }
+
+        public ConfigurationLoader(IErrorDisplayer errorDelegate, ILogHandler logger, string configPath)
         {
             this.errorViewDelegate = errorDelegate;
             this.cfgPath = configPath;
+            this.logger = logger;
         }
 
         public Configuration LoadConfig()
@@ -33,7 +37,7 @@ namespace citrix_launcher
                 {
                     var exitcode = 2;
 
-                    var msg = Properties.Strings.popupErrorCfgFileMissing;
+                    var msg = Properties.Strings.errorCfgFileMissing;
                     msg += Environment.NewLine;
                     msg += "[ " + cfgPath + " ]";
 
@@ -52,13 +56,15 @@ namespace citrix_launcher
             {
                 var exitcode = 1;
 
-                var msg = Properties.Strings.popupErrorCfgFileNotReadable;
+                var msg = Properties.Strings.errorCfgFileNotReadable;
                 msg += Environment.NewLine;
                 msg += Environment.NewLine;
                 msg += e.Message;
 
                 errorViewDelegate.ExitWithError(msg, exitcode);
             }
+
+
 
             return config;
         }
@@ -67,41 +73,47 @@ namespace citrix_launcher
         {
             if (IsConfigValid(currentConfig))
             {
-                config.CtxClientArgs = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_ARGS];
-                config.CtxClientPath = currentConfig[Configuration.MandatoryKeys.CTX_CLIENT_PATH];
-                config.CtxWindowTitle = currentConfig[Configuration.MandatoryKeys.CTX_WINDOW_TITLE];
-                config.IpRegexPattern = currentConfig[Configuration.MandatoryKeys.IP_REGEX_PATTERN];
+                // TODO: Make this loading dynamic
+                config.CitrixClearCache = bool.Parse(currentConfig[Configuration.MandatoryKeys.CITRIX_CLEAR_CACHE]);
+                config.CitrixClientArgs = currentConfig[Configuration.MandatoryKeys.CITRIX_CLIENT_ARGS];
+                config.CitrixClientPath = currentConfig[Configuration.MandatoryKeys.CITRIX_CLIENT_PATH];
+                config.CitrixWindowTitle = currentConfig[Configuration.MandatoryKeys.CITRIX_WINDOW_TITLE];
                 config.LaunchTimeout = int.Parse(currentConfig[Configuration.MandatoryKeys.LAUNCH_TIMEOUT_IN_SECONDS]);
-                config.PopupBrowserArgs = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_ARGS];
-                config.PopupBrowserOrURL = currentConfig[Configuration.MandatoryKeys.POPUP_BROWSER_OR_URL];
 
-                if (currentConfig.ContainsKey(Configuration.OptionalKeys.CTX_AUTOSTART))
+                if (currentConfig.ContainsKey(Configuration.OptionalKeys.CITRIX_AUTOSTART))
                 {
-                    config.CtxAutostart = bool.Parse(currentConfig[Configuration.OptionalKeys.CTX_AUTOSTART]);
+                    config.CitrixAutostart = bool.Parse(currentConfig[Configuration.OptionalKeys.CITRIX_AUTOSTART]);
+                    config.CitrixCachePath = Environment.ExpandEnvironmentVariables(currentConfig[Configuration.OptionalKeys.CITRIX_CACHE_PATH]);
                 }
 
-                if (!File.Exists(config.CtxClientPath))
+                if (!File.Exists(config.CitrixClientPath))
                 {
                     var exitcode = 2;
 
-                    var msg = Properties.Strings.popupErrorCtxClientMissing;
+                    var msg = Properties.Strings.errorCtxClientMissing;
                     msg += Environment.NewLine;
-                    msg += "[ " + config.CtxClientPath + " ]";
-                    Console.WriteLine(config.CtxClientPath);
+                    msg += "[ " + config.CitrixClientPath + " ]";
+                    Console.WriteLine(config.CitrixClientPath);
 
                     errorViewDelegate.ExitWithError(msg, exitcode);
                 }
             }
+            else if (IsFallbackConfigValid(currentConfig))
+            {
+                config.useFallbackConfig = true;
+                config.BrowserURL = currentConfig[Configuration.MandatoryFallbackKeys.BROWSER_URL];
+                config.BrowserPath = currentConfig[Configuration.MandatoryFallbackKeys.BROWSER_PATH];
+            }
             else
             {
-                throw new Exception(Properties.Strings.popupErrorCfgFileInvalid);
+                throw new Exception(Properties.Strings.errorCfgFileInvalid);
             }
         }
 
         private Dictionary<string, string> ParseConfig(List<string> namespaces, Dictionary<string, string> cfg)
         {
             Dictionary<string, string> currentConfig = GetNamespacedConfig(namespaces, cfg);
-
+            this.config.didMatchIp = this.didMatchIp;
             return currentConfig;
         }
 
@@ -196,24 +208,28 @@ namespace citrix_launcher
                     if (Regex.IsMatch(ipAddress, ipRegEx))
                     {
                         match = true;
+                        logger.Write(string.Format("IP-address {0} matched pattern {1}", ipAddress, ipRegEx));
                         break;
                     }
                 }
 
                 if (match)
                 {
+                    this.didMatchIp = true;
                     ipMatchedNS = ns;
+                    logger.Write(string.Format("IP matched namespace: " + ipMatchedNS));
                 }
             }
 
             if (ipMatchedNS == "") return "";
+ 
 
             if (!DoGroupBasedConfig(cfg))
             {
                 return ipMatchedNS;
             }
 
-            var ldapKeyBase = ".LDAP_MEMBER_OF";
+            var ldapKeyBase = ".LDAP_MEMBER_OF_REGEX_PATTERN";
             var prioKeyBase = ".PRIORITY";
 
             var prioritizedNamespace = "";
@@ -222,11 +238,12 @@ namespace citrix_launcher
             try
             {
                 var ctx = new PrincipalContext(ContextType.Domain);
-                var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName);
+                var user = UserPrincipal.FindByIdentity(ctx, IdentityType.SamAccountName, Environment.UserName);
                 PrincipalSearchResult<Principal> groups;
+
                 if (user!= null)
                 {
-                    groups = user.GetGroups();
+                    groups = user.GetAuthorizationGroups();
 
                     foreach (var ns in namespaces)
                     {
@@ -240,11 +257,15 @@ namespace citrix_launcher
                                 if (Regex.IsMatch(group.Name, ldapGroupPattern))
                                 {
                                     var pri = int.Parse(cfg[ns + prioKeyBase]);
+
                                     if (pri < highestPri)
                                     {
                                         highestPri = pri;
                                         prioritizedNamespace = ns;
                                     }
+
+                                    logger.Write(string.Format("Matched group {0} with pattern {1} and priority {2} from namespace {3}.", group.Name, ldapGroupPattern, pri, ns));
+                                    logger.Write("Current highest priority: " + highestPri + " Current prioritized namespace: " + prioritizedNamespace);
                                 }
                             }
                         }
@@ -255,11 +276,16 @@ namespace citrix_launcher
                     }
                 }
             }
-            catch(Exception){ /* Don't do anything to failed connections to AD */ }
+            catch(Exception)
+            {
+                /* Don't do anything to failed connections to AD */
+                logger.Write("Could not connect to Active Directory.");
+            }
 
             if (prioritizedNamespace == "")
             {
-                throw new Exception(Properties.Strings.popupErrorCfgFileNoGroupConfig);
+                logger.Write(Properties.Strings.errorCfgFileNoGroupCfgOrLDAPMismatch);
+                throw new Exception(Properties.Strings.errorCfgFileNoGroupCfgOrLDAPMismatch);
             }
 
             return prioritizedNamespace;
@@ -281,6 +307,8 @@ namespace citrix_launcher
             }
             catch(Exception) { }
 
+            logger.Write(string.Format("Performing group based configuration: {0}", doGroupBased));
+
             return doGroupBased;
         }
 
@@ -296,6 +324,7 @@ namespace citrix_launcher
 
             var value = lineParts[1].Trim();
             cfg.Add(key, value);
+            logger.Write(string.Format("Read from config file: {0} -> {1}", key, value));
         }
 
         private bool IsConfigValid(Dictionary<string, string> cfg)
@@ -307,6 +336,24 @@ namespace citrix_launcher
             {
                 if (!cfg.ContainsKey(field.GetValue(mandatoryKeys).ToString()))
                 {
+                    logger.Write("Did not find mandatory field: " + field);
+                    valid = false;
+                }
+            }
+
+            return valid;
+        }
+
+        private bool IsFallbackConfigValid(Dictionary<string, string> cfg)
+        {
+            var mandatoryFallbackKeys = new Configuration.MandatoryFallbackKeys();
+            bool valid = true;
+
+            foreach (var field in typeof(Configuration.MandatoryFallbackKeys).GetFields())
+            {
+                if (!cfg.ContainsKey(field.GetValue(mandatoryFallbackKeys).ToString()))
+                {
+                    logger.Write("Did not find mandatory fallback field: " + field);
                     valid = false;
                 }
             }

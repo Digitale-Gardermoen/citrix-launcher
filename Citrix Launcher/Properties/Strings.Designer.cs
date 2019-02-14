@@ -83,63 +83,63 @@ namespace citrix_launcher.Properties {
         ///
         ///Trykk OK for å avslutte applikasjonen..
         /// </summary>
-        internal static string popupErrorBottomText {
+        internal static string errorBottomText {
             get {
-                return ResourceManager.GetString("popupErrorBottomText", resourceCulture);
+                return ResourceManager.GetString("errorBottomText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Konfigurasjons-filen inneholder feil!.
+        ///   Looks up a localized string similar to Feil ved verifisering av konfigurasjonsfil..
         /// </summary>
-        internal static string popupErrorCfgFileInvalid {
+        internal static string errorCfgFileInvalid {
             get {
-                return ResourceManager.GetString("popupErrorCfgFileInvalid", resourceCulture);
+                return ResourceManager.GetString("errorCfgFileInvalid", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finner ikke konfigurasjonsfil!.
+        ///   Looks up a localized string similar to Finner ikke konfigurasjonsfil..
         /// </summary>
-        internal static string popupErrorCfgFileMissing {
+        internal static string errorCfgFileMissing {
             get {
-                return ResourceManager.GetString("popupErrorCfgFileMissing", resourceCulture);
+                return ResourceManager.GetString("errorCfgFileMissing", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mangler gruppekonfigurasjon i konfigurasjonsfil!.
+        ///   Looks up a localized string similar to Kunne ikke koble brukeren din til en profil basert på gruppemedlemskap..
         /// </summary>
-        internal static string popupErrorCfgFileNoGroupConfig {
+        internal static string errorCfgFileNoGroupCfgOrLDAPMismatch {
             get {
-                return ResourceManager.GetString("popupErrorCfgFileNoGroupConfig", resourceCulture);
+                return ResourceManager.GetString("errorCfgFileNoGroupCfgOrLDAPMismatch", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Feil ved lesing av konfigurasjonsfil..
         /// </summary>
-        internal static string popupErrorCfgFileNotReadable {
+        internal static string errorCfgFileNotReadable {
             get {
-                return ResourceManager.GetString("popupErrorCfgFileNotReadable", resourceCulture);
+                return ResourceManager.GetString("errorCfgFileNotReadable", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finner ikke Citrix klient!.
+        ///   Looks up a localized string similar to Finner ikke Citrix klient..
         /// </summary>
-        internal static string popupErrorCtxClientMissing {
+        internal static string errorCtxClientMissing {
             get {
-                return ResourceManager.GetString("popupErrorCtxClientMissing", resourceCulture);
+                return ResourceManager.GetString("errorCtxClientMissing", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: FEIL.
+        ///   Looks up a localized string similar to Ønsker du å starte Digitalt Vindu?.
         /// </summary>
-        internal static string popupErrorTitle {
+        internal static string launchCitrixPrompt {
             get {
-                return ResourceManager.GetString("popupErrorTitle", resourceCulture);
+                return ResourceManager.GetString("launchCitrixPrompt", resourceCulture);
             }
         }
         
@@ -147,36 +147,28 @@ namespace citrix_launcher.Properties {
         ///   Looks up a localized string similar to Du sitter utenfor intern eller sikker sone.
         ///Ønsker du å koble til hjemmekontor?.
         /// </summary>
-        internal static string popupText {
+        internal static string launchHomeOfficePrompt {
             get {
-                return ResourceManager.GetString("popupText", resourceCulture);
+                return ResourceManager.GetString("launchHomeOfficePrompt", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: Sone sjekk.
+        ///   Looks up a localized string similar to Det ser ut til at Citrix klienten ikke svarer.
+        ///Vil du forsøke på nytt?.
         /// </summary>
-        internal static string popupWindowTitle {
+        internal static string retryCitrixLaunchPrompt {
             get {
-                return ResourceManager.GetString("popupWindowTitle", resourceCulture);
+                return ResourceManager.GetString("retryCitrixLaunchPrompt", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ønsker du å starte Digitalt Vindu?.
+        ///   Looks up a localized string similar to Digitalt Vindu.
         /// </summary>
-        internal static string promptText {
+        internal static string windowTitle {
             get {
-                return ResourceManager.GetString("promptText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Digitalt Vindu: Intern sone.
-        /// </summary>
-        internal static string promptWindowTitle {
-            get {
-                return ResourceManager.GetString("promptWindowTitle", resourceCulture);
+                return ResourceManager.GetString("windowTitle", resourceCulture);
             }
         }
     }

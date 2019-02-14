@@ -123,40 +123,38 @@
   <data name="buttonYes" xml:space="preserve">
     <value>Ja</value>
   </data>
-  <data name="popupErrorBottomText" xml:space="preserve">
+  <data name="errorBottomText" xml:space="preserve">
     <value>Vennligst kontakt DGI Servicesenter på telefon: 64009000 eller e-post: servicedesk@dgi.no
 
 Trykk OK for å avslutte applikasjonen.</value>
   </data>
-  <data name="popupErrorCfgFileInvalid" xml:space="preserve">
-    <value>Konfigurasjons-filen inneholder feil!</value>
+  <data name="errorCfgFileInvalid" xml:space="preserve">
+    <value>Feil ved verifisering av konfigurasjonsfil.</value>
   </data>
-  <data name="popupErrorCfgFileMissing" xml:space="preserve">
-    <value>Finner ikke konfigurasjonsfil!</value>
+  <data name="errorCfgFileMissing" xml:space="preserve">
+    <value>Finner ikke konfigurasjonsfil.</value>
   </data>
-  <data name="popupErrorCfgFileNoGroupConfig" xml:space="preserve">
-    <value>Mangler gruppekonfigurasjon i konfigurasjonsfil!</value>
+  <data name="errorCfgFileNoGroupCfgOrLDAPMismatch" xml:space="preserve">
+    <value>Kunne ikke koble brukeren din til en profil basert på gruppemedlemskap.</value>
   </data>
-  <data name="popupErrorCfgFileNotReadable" xml:space="preserve">
+  <data name="errorCfgFileNotReadable" xml:space="preserve">
     <value>Feil ved lesing av konfigurasjonsfil.</value>
   </data>
-  <data name="popupErrorCtxClientMissing" xml:space="preserve">
-    <value>Finner ikke Citrix klient!</value>
+  <data name="errorCtxClientMissing" xml:space="preserve">
+    <value>Finner ikke Citrix klient.</value>
   </data>
-  <data name="popupErrorTitle" xml:space="preserve">
-    <value>Digitalt Vindu: FEIL</value>
+  <data name="launchCitrixPrompt" xml:space="preserve">
+    <value>Ønsker du å starte Digitalt Vindu?</value>
   </data>
-  <data name="popupText" xml:space="preserve">
+  <data name="launchHomeOfficePrompt" xml:space="preserve">
     <value>Du sitter utenfor intern eller sikker sone.
 Ønsker du å koble til hjemmekontor?</value>
   </data>
-  <data name="popupWindowTitle" xml:space="preserve">
-    <value>Digitalt Vindu: Sone sjekk</value>
+  <data name="retryCitrixLaunchPrompt" xml:space="preserve">
+    <value>Det ser ut til at Citrix klienten ikke svarer.
+Vil du forsøke på nytt?</value>
   </data>
-  <data name="promptText" xml:space="preserve">
-    <value>Ønsker du å starte Digitalt Vindu?</value>
-  </data>
-  <data name="promptWindowTitle" xml:space="preserve">
-    <value>Digitalt Vindu: Intern sone</value>
+  <data name="windowTitle" xml:space="preserve">
+    <value>Digitalt Vindu</value>
   </data>
 </root>
