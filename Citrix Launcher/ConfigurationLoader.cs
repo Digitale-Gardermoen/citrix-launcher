@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -63,8 +64,6 @@ namespace citrix_launcher
 
                 errorViewDelegate.ExitWithError(msg, exitcode);
             }
-
-
 
             return config;
         }
@@ -201,6 +200,8 @@ namespace citrix_launcher
                 var ipRegEx = cfg[ns + ipRegexKeyBase];
                 var ipAddresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
                 var match = false;
+                var domain = IPGlobalProperties.GetIPGlobalProperties().DomainName;
+
                 foreach (IPAddress adr in ipAddresses)
                 {
                     string ipAddress = adr.ToString();

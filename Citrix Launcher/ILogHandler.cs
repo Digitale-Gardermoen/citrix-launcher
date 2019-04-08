@@ -4,7 +4,6 @@ namespace citrix_launcher
 {
     public interface ILogHandler
     {
-
         void Write(string text);
 
         void Write(Dictionary<string,string> dictionary);

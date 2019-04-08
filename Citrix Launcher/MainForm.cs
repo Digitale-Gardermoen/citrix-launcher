@@ -14,9 +14,8 @@ namespace citrix_launcher
         private IConfigProvider configProvider;
 
         [DllImport("user32.dll")] internal static extern IntPtr SetForegroundWindow(IntPtr hWnd);
-        [DllImport("user32.dll")] internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         [DllImport("user32.dll")] internal static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpszClass, string lpszWindow);
-
+        [DllImport("user32.dll")] internal static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         #region Form
         public MainForm(IConfigProvider provider, ILogHandler logger)
