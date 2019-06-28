@@ -43,19 +43,18 @@ namespace citrix_launcher
             {
                 IntPtr wHandle = FindWindowEx(IntPtr.Zero, IntPtr.Zero, null, Config.CitrixWindowTitle);
 
-                if (wHandle != IntPtr.Zero)
+                if (wHandle == IntPtr.Zero)
+                {
+                    ClearCitrixCache();
+                    StartCitrix();
+                }
+                else
                 {
                     ShowWindow(wHandle, 3);
                     SetForegroundWindow(wHandle);
                     Application.Exit();
                 }
-                else
-                {
-                    ClearCitrixCache();
-                }
             }
-
-            StartCitrix();
         }
 
         private void ClearCitrixCache()
